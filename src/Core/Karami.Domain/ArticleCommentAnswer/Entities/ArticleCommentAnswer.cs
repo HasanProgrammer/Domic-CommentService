@@ -170,7 +170,7 @@ public class ArticleCommentAnswer : Entity<string>
         var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
 
         UpdatedBy   = updatedBy;
-        UpdatedRole = updatedRole; 
+        UpdatedRole = updatedRole;
         IsDeleted   = IsDeleted.Delete;
         UpdatedAt   = new UpdatedAt(nowDateTime, nowPersianDateTime);
         
