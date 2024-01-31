@@ -11,7 +11,6 @@ namespace Karami.Domain.ArticleCommentAnswer.Entities;
 
 public class ArticleCommentAnswer : Entity<string>
 {
-    public string OwnerId   { get; private set; }
     public string CommentId { get; private set; }
     
     /*---------------------------------------------------------------*/
@@ -34,33 +33,35 @@ public class ArticleCommentAnswer : Entity<string>
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="dotrisDateTime"></param>
+    /// <param name="dateTime"></param>
     /// <param name="id"></param>
-    /// <param name="ownerId"></param>
+    /// <param name="createdBy"></param>
+    /// <param name="createdRole"></param>
     /// <param name="commentId"></param>
     /// <param name="answer"></param>
-    public ArticleCommentAnswer(IDotrisDateTime dotrisDateTime, string id, string ownerId, string commentId, string answer)
+    public ArticleCommentAnswer(IDateTime dateTime, string id, string createdBy, string createdRole, 
+        string commentId, string answer
+    )
     {
         var nowDateTime        = DateTime.Now;
-        var nowPersianDateTime = dotrisDateTime.ToPersianShortDate(nowDateTime);
+        var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
 
-        Id        = id;
-        OwnerId   = ownerId;
-        CommentId = commentId;
-        Answer    = new Answer(answer);
-        CreatedAt = new CreatedAt(nowDateTime, nowPersianDateTime);
-        UpdatedAt = new UpdatedAt(nowDateTime, nowPersianDateTime);
+        Id          = id;
+        CreatedBy   = createdBy;
+        CommentId   = commentId;
+        CreatedRole = createdRole;
+        Answer      = new Answer(answer);
+        CreatedAt   = new CreatedAt(nowDateTime, nowPersianDateTime);
         
         AddEvent(
             new ArticleCommentAnswerCreated {
                 Id                    = id                 , 
-                OwnerId               = ownerId            ,
+                CreatedBy             = createdBy          ,
+                CreatedRole           = createdRole        ,
                 CommentId             = commentId          , 
                 Answer                = answer             ,
                 CreatedAt_EnglishDate = nowDateTime        ,
-                UpdatedAt_EnglishDate = nowDateTime        ,
-                CreatedAt_PersianDate = nowPersianDateTime ,
-                UpdatedAt_PersianDate = nowPersianDateTime
+                CreatedAt_PersianDate = nowPersianDateTime
             }
         );
     }
@@ -72,19 +73,25 @@ public class ArticleCommentAnswer : Entity<string>
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="dotrisDateTime"></param>
+    /// <param name="dateTime"></param>
+    /// <param name="updatedBy"></param>
+    /// <param name="updatedRole"></param>
     /// <param name="answer"></param>
-    public void Change(IDotrisDateTime dotrisDateTime, string answer)
+    public void Change(IDateTime dateTime, string updatedBy, string updatedRole, string answer)
     {
         var nowDateTime        = DateTime.Now;
-        var nowPersianDateTime = dotrisDateTime.ToPersianShortDate(nowDateTime);
-        
-        Answer    = new Answer(answer);
-        UpdatedAt = new UpdatedAt(nowDateTime, nowPersianDateTime);
+        var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
+
+        UpdatedBy   = updatedBy;
+        UpdatedRole = updatedRole;
+        Answer      = new Answer(answer);
+        UpdatedAt   = new UpdatedAt(nowDateTime, nowPersianDateTime);
         
         AddEvent(
             new ArticleCommentAnswerUpdated {
                 Id                    = Id          ,
+                UpdatedBy             = updatedBy   ,
+                UpdatedRole           = updatedRole , 
                 Answer                = answer      ,
                 UpdatedAt_EnglishDate = nowDateTime ,
                 UpdatedAt_PersianDate = nowPersianDateTime
@@ -95,20 +102,26 @@ public class ArticleCommentAnswer : Entity<string>
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="dotrisDateTime"></param>
+    /// <param name="dateTime"></param>
+    /// <param name="updatedBy"></param>
+    /// <param name="updatedRole"></param>
     /// <param name="raiseEvent"></param>
-    public void Active(IDotrisDateTime dotrisDateTime, bool raiseEvent = true)
+    public void Active(IDateTime dateTime, string updatedBy, string updatedRole, bool raiseEvent = true)
     {
         var nowDateTime        = DateTime.Now;
-        var nowPersianDateTime = dotrisDateTime.ToPersianShortDate(nowDateTime);
+        var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
         
-        IsActive  = IsActive.Active;
-        UpdatedAt = new UpdatedAt(nowDateTime, nowPersianDateTime);
+        UpdatedBy   = updatedBy;
+        UpdatedRole = updatedRole;
+        IsActive    = IsActive.Active;
+        UpdatedAt   = new UpdatedAt(nowDateTime, nowPersianDateTime);
         
         if(raiseEvent)
             AddEvent(
                 new ArticleCommentAnswerActived {
                     Id                    = Id          ,
+                    UpdatedBy             = updatedBy   ,
+                    UpdatedRole           = updatedRole , 
                     UpdatedAt_EnglishDate = nowDateTime ,
                     UpdatedAt_PersianDate = nowPersianDateTime
                 }
@@ -118,20 +131,26 @@ public class ArticleCommentAnswer : Entity<string>
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="dotrisDateTime"></param>
+    /// <param name="dateTime"></param>
+    /// <param name="updatedBy"></param>
+    /// <param name="updatedRole"></param>
     /// <param name="raiseEvent"></param>
-    public void InActive(IDotrisDateTime dotrisDateTime, bool raiseEvent = true)
+    public void InActive(IDateTime dateTime, string updatedBy, string updatedRole, bool raiseEvent = true)
     {
         var nowDateTime        = DateTime.Now;
-        var nowPersianDateTime = dotrisDateTime.ToPersianShortDate(nowDateTime);
-        
-        IsActive  = IsActive.InActive;
-        UpdatedAt = new UpdatedAt(nowDateTime, nowPersianDateTime);
+        var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
+
+        UpdatedBy   = updatedBy;
+        UpdatedRole = updatedRole; 
+        IsActive    = IsActive.InActive;
+        UpdatedAt   = new UpdatedAt(nowDateTime, nowPersianDateTime);
         
         if(raiseEvent)
             AddEvent(
                 new ArticleCommentAnswerInActived {
                     Id                    = Id          ,
+                    UpdatedBy             = updatedBy   ,
+                    UpdatedRole           = updatedRole , 
                     UpdatedAt_EnglishDate = nowDateTime ,
                     UpdatedAt_PersianDate = nowPersianDateTime
                 }
@@ -141,20 +160,26 @@ public class ArticleCommentAnswer : Entity<string>
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="dotrisDateTime"></param>
+    /// <param name="dateTime"></param>
+    /// <param name="updatedBy"></param>
+    /// <param name="updatedRole"></param>
     /// <param name="raiseEvent"></param>
-    public void Delete(IDotrisDateTime dotrisDateTime, bool raiseEvent = true)
+    public void Delete(IDateTime dateTime, string updatedBy, string updatedRole, bool raiseEvent = true)
     {
         var nowDateTime        = DateTime.Now;
-        var nowPersianDateTime = dotrisDateTime.ToPersianShortDate(nowDateTime);
+        var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
 
-        IsDeleted = IsDeleted.Delete;
-        UpdatedAt = new UpdatedAt(nowDateTime, nowPersianDateTime);
+        UpdatedBy   = updatedBy;
+        UpdatedRole = updatedRole; 
+        IsDeleted   = IsDeleted.Delete;
+        UpdatedAt   = new UpdatedAt(nowDateTime, nowPersianDateTime);
         
         if(raiseEvent)
             AddEvent(
                 new ArticleCommentAnswerDeleted {
                     Id                    = Id          ,
+                    UpdatedBy             = updatedBy   ,
+                    UpdatedRole           = updatedRole , 
                     UpdatedAt_EnglishDate = nowDateTime ,
                     UpdatedAt_PersianDate = nowPersianDateTime
                 }

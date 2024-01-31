@@ -6,9 +6,7 @@ using Karami.Core.Domain.Enumerations;
 namespace Karami.Domain.ArticleCommentAnswer.Events;
 
 [MessageBroker(ExchangeType = Exchange.FanOut, Exchange = Broker.Comment_ArticleCommentAnswer_Exchange)]
-public class ArticleCommentAnswerUpdated : UpdateDomainEvent
+public class ArticleCommentAnswerUpdated : UpdateDomainEvent<string>
 {
-    public string Id      { get; init; }
-    public string OwnerId { get; init; }
-    public string Answer  { get; init; }
+    public string Answer { get; init; }
 }

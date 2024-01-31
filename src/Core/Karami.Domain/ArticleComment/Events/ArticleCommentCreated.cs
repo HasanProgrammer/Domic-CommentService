@@ -6,10 +6,8 @@ using Karami.Core.Domain.Enumerations;
 namespace Karami.Domain.ArticleComment.Events;
 
 [MessageBroker(ExchangeType = Exchange.FanOut, Exchange = Broker.Comment_ArticleComment_Exchange)]
-public class ArticleCommentCreated : CreateDomainEvent
+public class ArticleCommentCreated : CreateDomainEvent<string>
 {
-    public string Id        { get; init; }
-    public string OwnerId   { get; init; }
     public string ArticleId { get; init; }
     public string Comment   { get; init; }
 }
