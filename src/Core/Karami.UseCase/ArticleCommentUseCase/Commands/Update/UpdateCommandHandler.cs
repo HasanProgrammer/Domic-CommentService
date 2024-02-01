@@ -17,17 +17,17 @@ public class UpdateCommandHandler : ICommandHandler<UpdateCommand, string>
 {
     private readonly object _validationResult;
 
-    private readonly IDotrisDateTime                  _dotrisDateTime;
+    private readonly IDateTime                        _dateTime;
     private readonly ISerializer                      _serializer;
     private readonly IJsonWebToken                    _jsonWebToken;
     private readonly IEventCommandRepository          _eventCommandRepository;
     private readonly IArticleCommentCommandRepository _articleCommentCommandRepository;
 
     public UpdateCommandHandler(IArticleCommentCommandRepository articleCommentCommandRepository,
-        IEventCommandRepository eventCommandRepository, IDotrisDateTime dotrisDateTime, ISerializer serializer
+        IEventCommandRepository eventCommandRepository, IDateTime dateTime, ISerializer serializer
     )
     {
-        _dotrisDateTime                  = dotrisDateTime;
+        _dateTime                        = dateTime;
         _serializer                      = serializer;
         _eventCommandRepository          = eventCommandRepository;
         _articleCommentCommandRepository = articleCommentCommandRepository;
@@ -39,12 +39,14 @@ public class UpdateCommandHandler : ICommandHandler<UpdateCommand, string>
     public async Task<string> HandleAsync(UpdateCommand command, CancellationToken cancellationToken)
     {
         var targetComment = _validationResult as ArticleComment;
+        var updatedBy     = _jsonWebToken.GetIdentityUserId(command.Token);
+        var updatedRole   = _serializer.Serialize( _jsonWebToken.GetRoles(command.Token) );
         
-        targetComment.Change(_dotrisDateTime, command.Comment);
+        targetComment.Change(_dateTime, updatedBy, updatedRole, command.Comment);
 
         #region OutBox
 
-        var events = targetComment.GetEvents.ToEntityOfEvent(_dotrisDateTime, _serializer,
+        var events = targetComment.GetEvents.ToEntityOfEvent(_dateTime, _serializer,
             Service.AggregateArticleService, Table.ArticleCommentAnswerTable, Action.Update, 
             _jsonWebToken.GetUsername(command.Token)
         );

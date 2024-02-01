@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Karami.Persistence.Migrations.C
 {
     [DbContext(typeof(SQLContext))]
-    [Migration("20230723151022_CreateTablesVersion_1_0_0")]
-    partial class CreateTablesVersion_1_0_0
+    [Migration("20240201064652_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,6 +37,12 @@ namespace Karami.Persistence.Migrations.C
 
                     b.Property<string>("CreatedAt_PersianDate")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedRole")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("IsActive")
@@ -64,6 +70,12 @@ namespace Karami.Persistence.Migrations.C
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedRole")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("User")
                         .HasColumnType("nvarchar(max)");
 
@@ -81,13 +93,28 @@ namespace Karami.Persistence.Migrations.C
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedRole")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<byte>("IsActive")
                         .HasColumnType("tinyint");
 
                     b.Property<byte>("IsDeleted")
                         .HasColumnType("tinyint");
 
-                    b.Property<string>("OwnerId")
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedRole")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Version")
+                        .IsConcurrencyToken()
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -107,13 +134,28 @@ namespace Karami.Persistence.Migrations.C
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedRole")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<byte>("IsActive")
                         .HasColumnType("tinyint");
 
                     b.Property<byte>("IsDeleted")
                         .HasColumnType("tinyint");
 
-                    b.Property<string>("OwnerId")
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedRole")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Version")
+                        .IsConcurrencyToken()
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -157,12 +199,10 @@ namespace Karami.Persistence.Migrations.C
                                 .HasColumnType("nvarchar(450)");
 
                             b1.Property<DateTime?>("EnglishDate")
-                                .IsRequired()
                                 .HasColumnType("datetime2")
                                 .HasColumnName("UpdatedAt_EnglishDate");
 
                             b1.Property<string>("PersianDate")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("UpdatedAt_PersianDate");
 
@@ -195,7 +235,8 @@ namespace Karami.Persistence.Migrations.C
 
                     b.Navigation("Comment");
 
-                    b.Navigation("CreatedAt");
+                    b.Navigation("CreatedAt")
+                        .IsRequired();
 
                     b.Navigation("UpdatedAt");
                 });
@@ -237,12 +278,10 @@ namespace Karami.Persistence.Migrations.C
                                 .HasColumnType("nvarchar(450)");
 
                             b1.Property<DateTime?>("EnglishDate")
-                                .IsRequired()
                                 .HasColumnType("datetime2")
                                 .HasColumnName("UpdatedAt_EnglishDate");
 
                             b1.Property<string>("PersianDate")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)")
                                 .HasColumnName("UpdatedAt_PersianDate");
 
@@ -277,7 +316,8 @@ namespace Karami.Persistence.Migrations.C
 
                     b.Navigation("Comment");
 
-                    b.Navigation("CreatedAt");
+                    b.Navigation("CreatedAt")
+                        .IsRequired();
 
                     b.Navigation("UpdatedAt");
                 });

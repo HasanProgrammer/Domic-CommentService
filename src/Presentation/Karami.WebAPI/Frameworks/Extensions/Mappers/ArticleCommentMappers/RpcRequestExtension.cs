@@ -30,8 +30,7 @@ public partial class RpcRequestExtension
         if (typeof(T) == typeof(CreateCommand))
         {
             Request = new CreateCommand {
-                Token     = token                    , 
-                OwnerId   = request.OwnerId?.Value   ,
+                Token     = token                    ,
                 ArticleId = request.ArticleId?.Value ,
                 Comment   = request.Comment?.Value 
             };

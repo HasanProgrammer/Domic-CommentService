@@ -17,18 +17,18 @@ public class UpdateCommandHandler : ICommandHandler<UpdateCommand, string>
 {
     private readonly object _validationResult;
 
-    private readonly IDotrisDateTime                        _dotrisDateTime;
+    private readonly IDateTime                              _dateTime;
     private readonly ISerializer                            _serializer;
     private readonly IJsonWebToken                          _jsonWebToken;
     private readonly IEventCommandRepository                _eventCommandRepository;
     private readonly IArticleCommentAnswerCommandRepository _articleCommentAnswerCommandRepository;
 
     public UpdateCommandHandler(IArticleCommentAnswerCommandRepository articleCommentAnswerCommandRepository,
-        IEventCommandRepository eventCommandRepository, IDotrisDateTime dotrisDateTime, ISerializer serializer,
+        IEventCommandRepository eventCommandRepository, IDateTime dateTime, ISerializer serializer,
         IJsonWebToken jsonWebToken
     )
     {
-        _dotrisDateTime                        = dotrisDateTime;
+        _dateTime                              = dateTime;
         _serializer                            = serializer;
         _jsonWebToken                          = jsonWebToken;
         _eventCommandRepository                = eventCommandRepository;
@@ -39,16 +39,19 @@ public class UpdateCommandHandler : ICommandHandler<UpdateCommand, string>
     [WithTransaction]
     public async Task<string> HandleAsync(UpdateCommand command, CancellationToken cancellationToken)
     {
-        var answer = _validationResult as ArticleCommentAnswer;
+        var answer      = _validationResult as ArticleCommentAnswer;
+        var updatedBy   = _jsonWebToken.GetIdentityUserId(command.Token);
+        var updatedRole = _serializer.Serialize( _jsonWebToken.GetRoles(command.Token) );
         
-        answer.Change(_dotrisDateTime, command.Answer);
+        answer.Change(_dateTime, updatedBy, updatedRole, command.Answer);
 
         _articleCommentAnswerCommandRepository.Change(answer);
 
         #region OutBox
 
-        var events = answer.GetEvents.ToEntityOfEvent(_dotrisDateTime, _serializer, Service.CommentService,
-            Table.ArticleCommentAnswerTable, Action.Update, _jsonWebToken.GetUsername(command.Token)
+        var events = answer.GetEvents.ToEntityOfEvent(
+            _dateTime, _serializer, Service.CommentService, Table.ArticleCommentAnswerTable, Action.Update, 
+            _jsonWebToken.GetUsername(command.Token)
         );
 
         foreach (var @event in events)

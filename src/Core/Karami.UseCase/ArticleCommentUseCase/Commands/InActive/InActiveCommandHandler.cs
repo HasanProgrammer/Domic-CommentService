@@ -17,18 +17,18 @@ public class InActiveCommandHandler : ICommandHandler<InActiveCommand, string>
 {
     private readonly object _validationResult;
 
-    private readonly IDotrisDateTime                  _dotrisDateTime;
+    private readonly IDateTime                        _dateTime;
     private readonly ISerializer                      _serializer;
     private readonly IJsonWebToken                    _jsonWebToken;
     private readonly IArticleCommentCommandRepository _articleCommentCommandRepository;
     private readonly IEventCommandRepository          _eventCommandRepository;
 
     public InActiveCommandHandler(IArticleCommentCommandRepository articleCommentCommandRepository,
-        IEventCommandRepository eventCommandRepository, IDotrisDateTime dotrisDateTime, ISerializer serializer,
+        IEventCommandRepository eventCommandRepository, IDateTime dateTime, ISerializer serializer, 
         IJsonWebToken jsonWebToken
     )
     {
-        _dotrisDateTime                  = dotrisDateTime;
+        _dateTime                        = dateTime;
         _serializer                      = serializer;
         _jsonWebToken                    = jsonWebToken;
         _eventCommandRepository          = eventCommandRepository;
@@ -40,12 +40,14 @@ public class InActiveCommandHandler : ICommandHandler<InActiveCommand, string>
     public async Task<string> HandleAsync(InActiveCommand command, CancellationToken cancellationToken)
     {
         var targetComment = _validationResult as ArticleComment;
+        var updatedBy     = _jsonWebToken.GetIdentityUserId(command.Token);
+        var updatedRole   = _serializer.Serialize( _jsonWebToken.GetRoles(command.Token) );
         
-        targetComment.InActive(_dotrisDateTime);
+        targetComment.InActive(_dateTime, updatedBy, updatedRole);
 
         #region OutBox
 
-        var events = targetComment.GetEvents.ToEntityOfEvent(_dotrisDateTime, _serializer, Service.CommentService,
+        var events = targetComment.GetEvents.ToEntityOfEvent(_dateTime, _serializer, Service.CommentService,
             Table.ArticleCommentTable, Action.Update, _jsonWebToken.GetUsername(command.Token)
         );
 

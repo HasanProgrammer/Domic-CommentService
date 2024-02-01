@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Karami.Persistence.Migrations.C
 {
-    public partial class CreateTablesVersion_1_0_0 : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,13 +14,17 @@ namespace Karami.Persistence.Migrations.C
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    OwnerId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ArticleId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(800)", maxLength: 800, nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedRole = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdatedRole = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<byte>(type: "tinyint", nullable: false),
+                    Version = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<byte>(type: "tinyint", nullable: false),
-                    CreatedAt_EnglishDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedAt_PersianDate = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt_EnglishDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt_PersianDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UpdatedAt_EnglishDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt_PersianDate = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -45,7 +49,11 @@ namespace Karami.Persistence.Migrations.C
                     UpdatedAt_EnglishDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt_PersianDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<int>(type: "int", nullable: false)
+                    IsDeleted = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedRole = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedRole = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -57,13 +65,17 @@ namespace Karami.Persistence.Migrations.C
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    OwnerId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CommentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Answer = table.Column<string>(type: "nvarchar(800)", maxLength: 800, nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedRole = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdatedRole = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<byte>(type: "tinyint", nullable: false),
+                    Version = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<byte>(type: "tinyint", nullable: false),
-                    CreatedAt_EnglishDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedAt_PersianDate = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt_EnglishDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt_PersianDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UpdatedAt_EnglishDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt_PersianDate = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },

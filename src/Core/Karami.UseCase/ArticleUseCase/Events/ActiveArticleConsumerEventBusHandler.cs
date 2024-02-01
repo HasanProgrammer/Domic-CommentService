@@ -10,16 +10,15 @@ namespace Karami.UseCase.ArticleUseCase.Events;
 
 public class DeleteArticleConsumerEventBusHandler : IConsumerEventBusHandler<ArticleActived>
 {
-    private readonly IDotrisDateTime                        _dotrisDateTime;
+    private readonly IDateTime                              _dateTime;
     private readonly IArticleCommentCommandRepository       _articleCommentCommandRepository;
     private readonly IArticleCommentAnswerCommandRepository _articleCommentAnswerCommandRepository;
 
     public DeleteArticleConsumerEventBusHandler(IArticleCommentCommandRepository articleCommentCommandRepository,
-        IArticleCommentAnswerCommandRepository articleCommentAnswerCommandRepository,
-        IDotrisDateTime dotrisDateTime
+        IArticleCommentAnswerCommandRepository articleCommentAnswerCommandRepository, IDateTime dateTime
     )
     {
-        _dotrisDateTime                        = dotrisDateTime;
+        _dateTime                              = dateTime;
         _articleCommentCommandRepository       = articleCommentCommandRepository;
         _articleCommentAnswerCommandRepository = articleCommentAnswerCommandRepository;
     }
@@ -32,13 +31,13 @@ public class DeleteArticleConsumerEventBusHandler : IConsumerEventBusHandler<Art
 
         foreach (var comment in comments)
         {
-            comment.Active(_dotrisDateTime, false);
+            comment.Active(_dateTime, @event.UpdatedBy, @event.UpdatedRole, false);
             
             _articleCommentCommandRepository.Change(comment);
             
             foreach (var answer in comment.Answers)
             {
-                answer.Active(_dotrisDateTime, false);
+                answer.Active(_dateTime, @event.UpdatedBy, @event.UpdatedRole, false);
                 
                 _articleCommentAnswerCommandRepository.Change(answer);
             }

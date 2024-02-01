@@ -13,15 +13,20 @@ public class DeleteCommandHandler : ICommandHandler<DeleteCommand, string>
 {
     private readonly object _validationResult;
 
-    private readonly IDotrisDateTime                        _dotrisDateTime;
+    private readonly IDateTime                              _dateTime;
+    private readonly IJsonWebToken                          _jsonWebToken;
+    private readonly ISerializer                            _serializer;
     private readonly IArticleCommentCommandRepository       _articleCommentCommandRepository;
     private readonly IArticleCommentAnswerCommandRepository _articleCommentAnswerCommandRepository;
 
     public DeleteCommandHandler(IArticleCommentCommandRepository articleCommentCommandRepository,
-        IArticleCommentAnswerCommandRepository articleCommentAnswerCommandRepository, IDotrisDateTime dotrisDateTime
+        IArticleCommentAnswerCommandRepository articleCommentAnswerCommandRepository, IDateTime dateTime,
+        IJsonWebToken jsonWebToken, ISerializer serializer
     )
     {
-        _dotrisDateTime                        = dotrisDateTime;
+        _dateTime                              = dateTime;
+        _jsonWebToken                          = jsonWebToken;
+        _serializer                            = serializer;
         _articleCommentCommandRepository       = articleCommentCommandRepository;
         _articleCommentAnswerCommandRepository = articleCommentAnswerCommandRepository;
     }
@@ -33,14 +38,16 @@ public class DeleteCommandHandler : ICommandHandler<DeleteCommand, string>
     )
     {
         var targetComment = _validationResult as ArticleComment;
+        var updatedBy     = _jsonWebToken.GetIdentityUserId(command.Token);
+        var updatedRole   = _serializer.Serialize( _jsonWebToken.GetRoles(command.Token) );
         
-        targetComment.Delete(_dotrisDateTime);
+        targetComment.Delete(_dateTime, updatedBy, updatedRole);
 
         await _articleCommentCommandRepository.ChangeAsync(targetComment, cancellationToken);
 
         foreach (var answer in targetComment.Answers)
         {
-            answer.Delete(_dotrisDateTime, false);
+            answer.Delete(_dateTime, updatedBy, updatedRole, false);
             
             await _articleCommentAnswerCommandRepository.ChangeAsync(answer, cancellationToken);
         }

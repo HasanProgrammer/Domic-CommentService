@@ -5,19 +5,18 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Karami.Persistence.Configs.C;
 
-public class ArticleCommentAnswerConfig : IEntityTypeConfiguration<ArticleCommentAnswer>
+public class ArticleCommentAnswerConfig : BaseEntityConfig<ArticleCommentAnswer, string>
 {
-    public void Configure(EntityTypeBuilder<ArticleCommentAnswer> builder)
+    public override void Configure(EntityTypeBuilder<ArticleCommentAnswer> builder)
     {
-        //PrimaryKey
+        base.Configure(builder);
         
-        builder.ToTable("ArticleCommentAnswers");
-
         /*-----------------------------------------------------------*/
 
-        //Property
+        //Configs
 
-        builder.Property(answer => answer.OwnerId)  .IsRequired();
+        builder.ToTable("ArticleCommentAnswers");
+        
         builder.Property(answer => answer.CommentId).IsRequired();
         
         builder.OwnsOne(answer => answer.Answer)
@@ -33,11 +32,5 @@ public class ArticleCommentAnswerConfig : IEntityTypeConfiguration<ArticleCommen
         builder.HasOne(answer => answer.Comment)
                .WithMany(comment => comment.Answers)
                .HasForeignKey(answer => answer.CommentId);
-        
-        /*-----------------------------------------------------------*/
-        
-        //Configs
-        
-        new BaseEntityConfig<ArticleCommentAnswer, string>().Configure(builder);
     }
 }
