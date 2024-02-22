@@ -13,10 +13,12 @@ public static class IConfigurationBuilderExtension
     )
     {
         var jsonResult = Path.Combine(hostEnvironment.ContentRootPath, "Configs", "JsonResult.json");
+        var config     = Path.Combine(hostEnvironment.ContentRootPath, "Configs", "Config.json");
         var license    = Path.Combine(hostEnvironment.ContentRootPath, "Configs", "License.json");
         var service    = Path.Combine(hostEnvironment.ContentRootPath, "Configs", "Service.json");
         
         configurationBuilder.AddJsonFile(jsonResult , optional: true, reloadOnChange: true)
+                            .AddJsonFile(config     , optional: true, reloadOnChange: true)
                             .AddJsonFile(license    , optional: true, reloadOnChange: true)
                             .AddJsonFile(service    , optional: true, reloadOnChange: true);
 
