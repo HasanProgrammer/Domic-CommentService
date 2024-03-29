@@ -6,7 +6,4 @@ using Domic.Core.Domain.Enumerations;
 namespace Domic.Domain.ArticleCommentAnswer.Events;
 
 [MessageBroker(ExchangeType = Exchange.FanOut, Exchange = Broker.Comment_ArticleCommentAnswer_Exchange)]
-public class ArticleCommentAnswerDeleted : UpdateDomainEvent<string>
-{
-    
-}
+public class ArticleCommentAnswerDeleted : UpdateDomainEvent<string>;

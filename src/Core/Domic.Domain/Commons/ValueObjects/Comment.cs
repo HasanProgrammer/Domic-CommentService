@@ -1,7 +1,7 @@
 using Domic.Core.Domain.Contracts.Abstracts;
 using Domic.Core.Domain.Exceptions;
 
-namespace Domic.Domain.ArticleComment.ValueObjects;
+namespace Domic.Domain.Commons.ValueObjects;
 
 public class Comment : ValueObject
 {

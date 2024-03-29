@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
   </PropertyGroup>
@@ -9,6 +9,9 @@
   <!--CorePackage | Domain-->
   <ItemGroup>
     <PackageReference Include="Domic.Architecture.Domain" Version="2.0.0"/>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ArticleComment\ValueObjects\" />
   </ItemGroup>
   <!--CorePackage | Domain-->
   

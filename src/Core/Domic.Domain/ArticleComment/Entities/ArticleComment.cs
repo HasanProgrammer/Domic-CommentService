@@ -1,9 +1,9 @@
 using Domic.Domain.ArticleComment.Events;
-using Domic.Domain.ArticleComment.ValueObjects;
 using Domic.Core.Domain.Contracts.Abstracts;
 using Domic.Core.Domain.Contracts.Interfaces;
 using Domic.Core.Domain.Enumerations;
 using Domic.Core.Domain.ValueObjects;
+using Domic.Domain.Commons.ValueObjects;
 
 namespace Domic.Domain.ArticleComment.Entities;
 
