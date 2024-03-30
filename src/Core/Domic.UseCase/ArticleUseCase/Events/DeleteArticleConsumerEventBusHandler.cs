@@ -8,13 +8,13 @@ using Domic.Domain.ArticleCommentAnswer.Contracts.Interfaces;
 
 namespace Domic.UseCase.ArticleUseCase.Events;
 
-public class ActiveArticleConsumerEventBusHandler : IConsumerEventBusHandler<ArticleDeleted>
+public class DeleteArticleConsumerEventBusHandler : IConsumerEventBusHandler<ArticleDeleted>
 {
     private readonly IDateTime                              _dateTime;
     private readonly IArticleCommentCommandRepository       _articleCommentCommandRepository;
     private readonly IArticleCommentAnswerCommandRepository _articleCommentAnswerCommandRepository;
 
-    public ActiveArticleConsumerEventBusHandler(IArticleCommentCommandRepository articleCommentCommandRepository,
+    public DeleteArticleConsumerEventBusHandler(IArticleCommentCommandRepository articleCommentCommandRepository,
         IArticleCommentAnswerCommandRepository articleCommentAnswerCommandRepository, IDateTime dateTime
     )
     {

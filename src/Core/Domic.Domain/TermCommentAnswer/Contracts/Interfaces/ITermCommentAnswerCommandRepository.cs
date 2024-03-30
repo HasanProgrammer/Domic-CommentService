@@ -2,4 +2,4 @@
 
 namespace Domic.Domain.TermCommentAnswer.Contracts.Interfaces;
 
-public class ITermCommentAnswerCommandRepository : ICommandRepository<Entities.TermCommentAnswer, string>;
+public interface ITermCommentAnswerCommandRepository : ICommandRepository<Entities.TermCommentAnswer, string>;
