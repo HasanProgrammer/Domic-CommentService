@@ -1,20 +1,20 @@
 ﻿using Domic.Core.UseCase.Contracts.Interfaces;
 using Domic.Core.UseCase.Exceptions;
-using Domic.Domain.ArticleComment.Contracts.Interfaces;
+using Domic.Domain.TermComment.Contracts.Interfaces;
 
-namespace Domic.UseCase.ArticleCommentUseCase.Queries.ReadOne;
+namespace Domic.UseCase.TermCommentUseCase.Queries.ReadOne;
 
 public class ReadOneQueryValidator : IValidator<ReadOneQuery>
 {
-    private readonly IArticleCommentCommandRepository _articleCommentCommandRepository;
+    private readonly ITermCommentCommandRepository _termCommentCommandRepository;
 
-    public ReadOneQueryValidator(IArticleCommentCommandRepository articleCommentCommandRepository) 
-        => _articleCommentCommandRepository = articleCommentCommandRepository;
+    public ReadOneQueryValidator(ITermCommentCommandRepository termCommentCommandRepository) 
+        => _termCommentCommandRepository = termCommentCommandRepository;
 
     public async Task<object> ValidateAsync(ReadOneQuery input, CancellationToken cancellationToken)
     {
         var targetComment =
-            await _articleCommentCommandRepository.FindByIdEagerLoadingAsync(input.Id, cancellationToken);
+            await _termCommentCommandRepository.FindByIdEagerLoadingAsync(input.Id, cancellationToken);
 
         if (targetComment is null)
             throw new UseCaseException(

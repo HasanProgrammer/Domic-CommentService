@@ -1,25 +1,23 @@
 ﻿using Domic.Core.UseCase.Contracts.Interfaces;
 using Domic.Core.UseCase.Exceptions;
-using Domic.Domain.ArticleComment.Contracts.Interfaces;
+using Domic.Domain.TermComment.Contracts.Interfaces;
 
-namespace Domic.UseCase.ArticleCommentUseCase.Commands.Update;
+namespace Domic.UseCase.TermCommentUseCase.Commands.Update;
 
 public class UpdateCommandValidator : IValidator<UpdateCommand>
 {
-    private readonly IArticleCommentCommandRepository _articleCommentCommandRepository;
+    private readonly ITermCommentCommandRepository _termCommentCommandRepository;
 
-    public UpdateCommandValidator(IArticleCommentCommandRepository articleCommentCommandRepository)
-    {
-        _articleCommentCommandRepository = articleCommentCommandRepository;
-    }
+    public UpdateCommandValidator(ITermCommentCommandRepository termCommentCommandRepository)
+        => _termCommentCommandRepository = termCommentCommandRepository;
 
     public async Task<object> ValidateAsync(UpdateCommand input, CancellationToken cancellationToken)
     {
-        var targetComment = await _articleCommentCommandRepository.FindByIdAsync(input.TargetId, cancellationToken);
-        
+        var targetComment = await _termCommentCommandRepository.FindByIdAsync(input.CommentId, cancellationToken);
+
         if (targetComment is null)
             throw new UseCaseException(
-                string.Format("فیلدی با شناسه {0} وجود خارجی ندارد !", input.TargetId ?? "_خالی_")
+                string.Format("فیلدی با شناسه {0} وجود خارجی ندارد !", input.CommentId ?? "_خالی_")
             );
 
         return targetComment;

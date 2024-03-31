@@ -1,11 +1,11 @@
-﻿using Domic.UseCase.ArticleCommentUseCase.DTOs.ViewModels;
-using Domic.Core.Common.ClassHelpers;
+﻿using Domic.Core.Common.ClassHelpers;
 using Domic.Core.UseCase.Contracts.Abstracts;
 using Domic.Core.UseCase.Contracts.Interfaces;
+using Domic.UseCase.TermCommentUseCase.DTOs;
 
-namespace Domic.UseCase.ArticleCommentUseCase.Queries.ReadAllPaginated;
+namespace Domic.UseCase.TermCommentUseCase.Queries.ReadAllPaginated;
 
-public class ReadAllPaginatedQuery : PaginatedQuery, IQuery<PaginatedCollection<ArticleCommentsViewModel>>
+public class ReadAllPaginatedQuery : PaginatedQuery, IQuery<PaginatedCollection<TermCommentsDto>>
 {
     
 }

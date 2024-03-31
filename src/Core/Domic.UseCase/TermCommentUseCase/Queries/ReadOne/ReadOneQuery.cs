@@ -1,9 +1,9 @@
-﻿using Domic.UseCase.ArticleCommentUseCase.DTOs.ViewModels;
-using Domic.Core.UseCase.Contracts.Interfaces;
+﻿using Domic.Core.UseCase.Contracts.Interfaces;
+using Domic.UseCase.TermCommentUseCase.DTOs;
 
-namespace Domic.UseCase.ArticleCommentUseCase.Queries.ReadOne;
+namespace Domic.UseCase.TermCommentUseCase.Queries.ReadOne;
 
-public class ReadOneQuery : IQuery<ArticleCommentsViewModel>
+public class ReadOneQuery : IQuery<TermCommentsDto>
 {
     public string Id { get; set; }
 }

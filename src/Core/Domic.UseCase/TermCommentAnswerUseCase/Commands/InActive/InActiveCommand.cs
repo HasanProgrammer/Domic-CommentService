@@ -1,9 +1,9 @@
 ﻿using Domic.Core.UseCase.Contracts.Abstracts;
 using Domic.Core.UseCase.Contracts.Interfaces;
 
-namespace Domic.UseCase.TermCommentUseCase.Commands.InActive;
+namespace Domic.UseCase.TermCommentAnswerUseCase.Commands.InActive;
 
 public class InActiveCommand : Auditable, ICommand<string>
 {
-    public required string CommentId { get; init; }
+    public required string AnswerId { get; set; }
 }

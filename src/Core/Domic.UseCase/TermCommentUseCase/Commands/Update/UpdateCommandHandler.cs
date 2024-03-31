@@ -1,45 +1,41 @@
 ﻿#pragma warning disable CS0649
 
-using Domic.Core.Common.ClassConsts;
 using Domic.Core.Domain.Contracts.Interfaces;
 using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
-using Domic.Domain.ArticleComment.Contracts.Interfaces;
-using Domic.Domain.ArticleComment.Entities;
+using Domic.Domain.TermComment.Contracts.Interfaces;
+using Domic.Domain.TermComment.Entities;
 
-namespace Domic.UseCase.ArticleCommentUseCase.Commands.Update;
+namespace Domic.UseCase.TermCommentUseCase.Commands.Update;
 
 public class UpdateCommandHandler : ICommandHandler<UpdateCommand, string>
 {
     private readonly object _validationResult;
 
-    private readonly IDateTime                        _dateTime;
-    private readonly ISerializer                      _serializer;
-    private readonly IJsonWebToken                    _jsonWebToken;
-    private readonly IArticleCommentCommandRepository _articleCommentCommandRepository;
+    private readonly IDateTime _dateTime;
+    private readonly ISerializer _serializer;
+    private readonly ITermCommentCommandRepository _termCommentCommandRepository;
 
-    public UpdateCommandHandler(IArticleCommentCommandRepository articleCommentCommandRepository, 
+    public UpdateCommandHandler(ITermCommentCommandRepository termCommentCommandRepository,
         IDateTime dateTime, ISerializer serializer
     )
     {
-        _dateTime                        = dateTime;
-        _serializer                      = serializer;
-        _articleCommentCommandRepository = articleCommentCommandRepository;
+        _dateTime = dateTime;
+        _serializer = serializer;
+        _termCommentCommandRepository = termCommentCommandRepository;
     }
 
     [WithValidation]
     [WithTransaction]
-    [WithCleanCache(Keies = Cache.ArticleComments)]
-    public async Task<string> HandleAsync(UpdateCommand command, CancellationToken cancellationToken)
+    [WithCleanCache(Keies = "TermComments")]
+    public Task<string> HandleAsync(UpdateCommand command, CancellationToken cancellationToken)
     {
-        var targetComment = _validationResult as ArticleComment;
-        var updatedBy     = _jsonWebToken.GetIdentityUserId(command.Token);
-        var updatedRole   = _serializer.Serialize( _jsonWebToken.GetRoles(command.Token) );
-        
-        targetComment.Change(_dateTime, updatedBy, updatedRole, command.Comment);
+        var targetComment = _validationResult as TermComment;
 
-        await _articleCommentCommandRepository.ChangeAsync(targetComment, cancellationToken);
+        targetComment.Change(_dateTime, command.UserId, _serializer.Serialize(command.UserRoles), command.Comment);
 
-        return targetComment.Id;
+        _termCommentCommandRepository.Change(targetComment);
+
+        return Task.FromResult(targetComment.Id);
     }
 }

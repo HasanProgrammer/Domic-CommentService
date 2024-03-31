@@ -23,7 +23,7 @@ public class TermCommentAnswer : Entity<string>
     
     //Relations
     
-    public TermComment.Entities.TermComment TermComment { get; set; }
+    public TermComment.Entities.TermComment Comment { get; set; }
     
     /*---------------------------------------------------------------*/
     

@@ -1,10 +1,10 @@
-﻿using Domic.Core.UseCase.Contracts.Interfaces;
+﻿using Domic.Core.UseCase.Contracts.Abstracts;
+using Domic.Core.UseCase.Contracts.Interfaces;
 
-namespace Domic.UseCase.ArticleCommentUseCase.Commands.Update;
+namespace Domic.UseCase.TermCommentUseCase.Commands.Update;
 
-public class UpdateCommand : ICommand<string>
+public class UpdateCommand : Auditable, ICommand<string>
 {
-    public required string Token    { get; set; }
-    public required string TargetId { get; set; }
-    public required string Comment  { get; set; }
+    public required string CommentId { get; set; }
+    public required string Comment { get; set; }
 }

@@ -3,41 +3,37 @@
 using Domic.Core.Domain.Contracts.Interfaces;
 using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
-using Domic.Domain.ArticleComment.Contracts.Interfaces;
-using Domic.Domain.ArticleComment.Entities;
+using Domic.Domain.TermComment.Contracts.Interfaces;
+using Domic.Domain.TermComment.Entities;
 
-namespace Domic.UseCase.ArticleCommentUseCase.Commands.InActive;
+namespace Domic.UseCase.TermCommentUseCase.Commands.InActive;
 
 public class InActiveCommandHandler : ICommandHandler<InActiveCommand, string>
 {
     private readonly object _validationResult;
 
-    private readonly IDateTime                        _dateTime;
-    private readonly ISerializer                      _serializer;
-    private readonly IJsonWebToken                    _jsonWebToken;
-    private readonly IArticleCommentCommandRepository _articleCommentCommandRepository;
+    private readonly IDateTime _dateTime;
+    private readonly ISerializer _serializer;
+    private readonly ITermCommentCommandRepository _termCommentCommandRepository;
 
-    public InActiveCommandHandler(IArticleCommentCommandRepository articleCommentCommandRepository, 
-        IDateTime dateTime, ISerializer serializer, IJsonWebToken jsonWebToken
+    public InActiveCommandHandler(ITermCommentCommandRepository termCommentCommandRepository, IDateTime dateTime,
+        ISerializer serializer
     )
     {
-        _dateTime                        = dateTime;
-        _serializer                      = serializer;
-        _jsonWebToken                    = jsonWebToken;
-        _articleCommentCommandRepository = articleCommentCommandRepository;
+        _dateTime = dateTime;
+        _serializer = serializer;
+        _termCommentCommandRepository = termCommentCommandRepository;
     }
 
     [WithValidation]
     [WithTransaction]
     public Task<string> HandleAsync(InActiveCommand command, CancellationToken cancellationToken)
     {
-        var targetComment = _validationResult as ArticleComment;
-        var updatedBy     = _jsonWebToken.GetIdentityUserId(command.Token);
-        var updatedRole   = _serializer.Serialize( _jsonWebToken.GetRoles(command.Token) );
-        
-        targetComment.InActive(_dateTime, updatedBy, updatedRole);
+        var targetComment = _validationResult as TermComment;
 
-        _articleCommentCommandRepository.Change(targetComment);
+        targetComment.InActive(_dateTime, command.UserId, _serializer.Serialize(command.UserRoles));
+
+        _termCommentCommandRepository.Change(targetComment);
 
         return Task.FromResult(targetComment.Id);
     }
