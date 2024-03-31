@@ -1,13 +1,13 @@
-﻿using Domic.Core.TermComment.Grpc;
+﻿using Domic.Core.TermCommentAnswer.Grpc;
 using Domic.Core.UseCase.Contracts.Interfaces;
-using Domic.WebAPI.Frameworks.Extensions.Mappers.TermCommentMappers;
+using Domic.WebAPI.Frameworks.Extensions.Mappers.TermCommentAnswerMappers;
 using Dotris.WebAPI.Frameworks.Extensions;
 using Grpc.Core;
 
 namespace Domic.WebAPI.EntryPoints.GRPCs;
 
-public class TermCommentRPC(IMediator mediator, IConfiguration configuration, IJsonWebToken jsonWebToken)
-    : TermCommentService.TermCommentServiceBase
+public class TermCommentAnswerRPC(IMediator mediator, IConfiguration configuration, IJsonWebToken jsonWebToken)
+    : TermCommentAnswerService.TermCommentAnswerServiceBase
 {
     /// <summary>
     /// 

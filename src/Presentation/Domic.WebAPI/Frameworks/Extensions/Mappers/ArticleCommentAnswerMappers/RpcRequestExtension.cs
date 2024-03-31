@@ -34,7 +34,7 @@ public static partial class RpcRequestExtension
 }
 
 //Command
-public partial class RpcRequestExtension
+public static partial class RpcRequestExtension
 {
     /// <summary>
     /// 

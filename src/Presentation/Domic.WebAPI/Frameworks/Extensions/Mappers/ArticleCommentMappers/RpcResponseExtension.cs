@@ -10,7 +10,7 @@ public static partial class RpcResponseExtension
 }
 
 //Command
-public partial class RpcResponseExtension
+public static partial class RpcResponseExtension
 {
     /// <summary>
     /// 

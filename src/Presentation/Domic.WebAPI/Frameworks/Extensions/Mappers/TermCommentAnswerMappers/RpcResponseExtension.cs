@@ -1,30 +1,12 @@
 using Domic.Core.Common.ClassExtensions;
-using Domic.Core.ArticleCommentAnswer.Grpc;
+using Domic.Core.TermCommentAnswer.Grpc;
 
-namespace Domic.WebAPI.Frameworks.Extensions.Mappers.ArticleCommentAnswerMappers;
+namespace Domic.WebAPI.Frameworks.Extensions.Mappers.TermCommentAnswerMappers;
 
 //Query
 public static partial class RpcResponseExtension
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="response"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public static T ToRpcResponse<T>(this bool response)
-    {
-        object Response = null;
-
-        if (typeof(T) == typeof(CheckExistResponse))
-        {
-            Response = new CheckExistResponse {
-                Result = response
-            };
-        }
-
-        return (T)Response;
-    }
+    
 }
 
 //Command
@@ -77,7 +59,7 @@ public static partial class RpcResponseExtension
         {
             Response = new DeleteResponse {
                 Code    = configuration.GetSuccessStatusCode()    ,
-                Message = configuration.GetSuccessUpdateMessage() ,
+                Message = configuration.GetSuccessDeleteMessage() ,
                 Body    = new DeleteResponseBody { AnswerId = response }
             };
         }

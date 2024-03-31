@@ -1,30 +1,12 @@
 using Domic.Core.Common.ClassExtensions;
-using Domic.Core.ArticleCommentAnswer.Grpc;
+using Domic.Core.TermComment.Grpc;
 
-namespace Domic.WebAPI.Frameworks.Extensions.Mappers.ArticleCommentAnswerMappers;
+namespace Domic.WebAPI.Frameworks.Extensions.Mappers.TermCommentMappers;
 
 //Query
 public static partial class RpcResponseExtension
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="response"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public static T ToRpcResponse<T>(this bool response)
-    {
-        object Response = null;
-
-        if (typeof(T) == typeof(CheckExistResponse))
-        {
-            Response = new CheckExistResponse {
-                Result = response
-            };
-        }
-
-        return (T)Response;
-    }
+    
 }
 
 //Command
@@ -46,7 +28,7 @@ public static partial class RpcResponseExtension
             Response = new CreateResponse {
                 Code    = configuration.GetSuccessCreateStatusCode() ,
                 Message = configuration.GetSuccessCreateMessage()    ,
-                Body    = new CreateResponseBody { AnswerId = response }
+                Body    = new CreateResponseBody { CommentId = response }
             };
         }
         else if (typeof(T) == typeof(UpdateResponse))
@@ -54,7 +36,7 @@ public static partial class RpcResponseExtension
             Response = new UpdateResponse {
                 Code    = configuration.GetSuccessStatusCode()    ,
                 Message = configuration.GetSuccessUpdateMessage() ,
-                Body    = new UpdateResponseBody { AnswerId = response }
+                Body    = new UpdateResponseBody { CommentId = response }
             };
         }
         else if (typeof(T) == typeof(ActiveResponse))
@@ -62,7 +44,7 @@ public static partial class RpcResponseExtension
             Response = new ActiveResponse {
                 Code    = configuration.GetSuccessStatusCode()    ,
                 Message = configuration.GetSuccessUpdateMessage() ,
-                Body    = new ActiveResponseBody { AnswerId = response }
+                Body    = new ActiveResponseBody { CommentId = response }
             };
         }
         else if (typeof(T) == typeof(InActiveResponse))
@@ -70,15 +52,15 @@ public static partial class RpcResponseExtension
             Response = new InActiveResponse {
                 Code    = configuration.GetSuccessStatusCode()    ,
                 Message = configuration.GetSuccessUpdateMessage() ,
-                Body    = new InActiveResponseBody { AnswerId = response }
+                Body    = new InActiveResponseBody { CommentId = response }
             };
         }
         else if (typeof(T) == typeof(DeleteResponse))
         {
             Response = new DeleteResponse {
                 Code    = configuration.GetSuccessStatusCode()    ,
-                Message = configuration.GetSuccessUpdateMessage() ,
-                Body    = new DeleteResponseBody { AnswerId = response }
+                Message = configuration.GetSuccessDeleteMessage() ,
+                Body    = new DeleteResponseBody { CommentId = response }
             };
         }
 
