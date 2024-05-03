@@ -17,6 +17,7 @@
       "applicationUrl": "https://localhost:10001;http://localhost:1000",
       "environmentVariables": {
         "Elastic-Host": "http://localhost:9200",
+        "Elastic-Index": "comment",
         "Elastic-Username": "",
         "Elastic-Password": "",
         "E-RabbitMQ-Host": "localhost",

@@ -1,4 +1,5 @@
-﻿using Domic.Core.Domain.Contracts.Interfaces;
+﻿using Domic.Core.Common.ClassConsts;
+using Domic.Core.Domain.Contracts.Interfaces;
 using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
 using Domic.Domain.Term.Events;
@@ -16,7 +17,7 @@ public class InActiveTermConsumerEventBusHandler(
 {
     public void Handle(TermDeleted @event){}
 
-    [WithTransaction]
+    [TransactionConfig(Type = TransactionType.Command)]
     [WithCleanCache(Keies = "TermComments")]
     public async Task HandleAsync(TermDeleted @event, CancellationToken cancellationToken)
     {

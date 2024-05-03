@@ -21,6 +21,7 @@ public partial class SQLContext : DbContext
 public partial class SQLContext
 {
     public DbSet<Event> Events { get; set; }
+    public DbSet<ConsumerEvent> ConsumerEvents { get; set; }
     public DbSet<ArticleComment> ArticleComments { get; set; }
     public DbSet<ArticleCommentAnswer> ArticleCommentAnswers { get; set; }
     public DbSet<TermComment> TermComments { get; set; }
@@ -35,6 +36,7 @@ public partial class SQLContext
         base.OnModelCreating(builder);
 
         builder.ApplyConfiguration(new EventConfig());
+        builder.ApplyConfiguration(new ConsumerEventConfig());
         builder.ApplyConfiguration(new ArticleCommentConfig());
         builder.ApplyConfiguration(new ArticleCommentAnswerConfig());
         builder.ApplyConfiguration(new TermCommentConfig());

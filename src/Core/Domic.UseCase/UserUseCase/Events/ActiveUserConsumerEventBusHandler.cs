@@ -23,7 +23,7 @@ public class ActiveUserConsumerEventBusHandler : IConsumerEventBusHandler<UserAc
         _articleCommentAnswerCommandRepository = articleCommentAnswerCommandRepository;
     }
 
-    [WithTransaction]
+    [TransactionConfig(Type = TransactionType.Command)]
     [WithCleanCache(Keies = Cache.ArticleComments)]
     public void Handle(UserActived @event)
     {

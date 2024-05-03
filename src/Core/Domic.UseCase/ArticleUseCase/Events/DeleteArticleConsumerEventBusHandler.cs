@@ -22,8 +22,8 @@ public class DeleteArticleConsumerEventBusHandler : IConsumerEventBusHandler<Art
         _articleCommentCommandRepository       = articleCommentCommandRepository;
         _articleCommentAnswerCommandRepository = articleCommentAnswerCommandRepository;
     }
-
-    [WithTransaction]
+    
+    [TransactionConfig(Type = TransactionType.Command)]
     [WithCleanCache(Keies = Cache.ArticleComments)]
     public void Handle(ArticleDeleted @event)
     {
