@@ -27,7 +27,8 @@ services:
       - I-RabbitMQ-Port=
       - I-RabbitMQ-Username=
       - I-RabbitMQ-Password=
-      - RedisConnectionString=domic.comment.redis:6379
+      - E-RedisConnectionString=domic.comment.redis:6379
+      - I-RedisConnectionString=domic.comment.redis:6379
       - MongoConnectionString=
       - C-SqlServerConnectionString=Server=domic.comment.command.sql.server,1433;Database=CommentService;User ID=sa;Password=Hasan313@@313!!;Persist Security Info=True;MultipleActiveResultSets=True;
       - Q-SqlServerConnectionString=Server=domic.comment.query.sql.server,1433;Database=CommentService;User ID=sa;Password=Hasan313@@313!!;Persist Security Info=True;MultipleActiveResultSets=True;

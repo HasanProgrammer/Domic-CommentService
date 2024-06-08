@@ -8,7 +8,7 @@ using Domic.UseCase.ArticleCommentUseCase.DTOs.ViewModels;
 
 namespace Domic.UseCase.ArticleCommentUseCase.Caches;
 
-public class ArticlesEagerLoadingMemoryCache : IMemoryCacheSetter<List<ArticleCommentsViewModel>>
+public class ArticlesEagerLoadingMemoryCache : IInternalDistributedCacheHandler<List<ArticleCommentsViewModel>>
 {
     private readonly IArticleCommentCommandRepository _articleCommentCommandRepository;
 

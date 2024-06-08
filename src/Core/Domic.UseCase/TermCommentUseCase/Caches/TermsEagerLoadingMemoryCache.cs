@@ -7,7 +7,7 @@ using Domic.UseCase.TermCommentUseCase.DTOs;
 namespace Domic.UseCase.TermCommentUseCase.Caches;
 
 public class TermsEagerLoadingMemoryCache(ITermCommentCommandRepository termCommentCommandRepository) 
-    : IMemoryCacheSetter<List<TermCommentsDto>>
+    : IInternalDistributedCacheHandler<List<TermCommentsDto>>
 {
     [Config(Key = "TermComments", Ttl = 30 * 24 * 60)]
     public async Task<List<TermCommentsDto>> SetAsync(CancellationToken cancellationToken)

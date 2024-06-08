@@ -8,16 +8,17 @@ namespace Domic.UseCase.TermCommentUseCase.Queries.ReadAllPaginated;
 
 public class ReadAllPaginatedQueryHandler : IQueryHandler<ReadAllPaginatedQuery, PaginatedCollection<TermCommentsDto>>
 {
-    private readonly ICacheService _cacheService;
+    private readonly IInternalDistributedCacheMediator _distributedCacheMediator;
 
-    public ReadAllPaginatedQueryHandler(ICacheService cacheService) => _cacheService = cacheService;
+    public ReadAllPaginatedQueryHandler(IInternalDistributedCacheMediator distributedCacheMediator) 
+        => _distributedCacheMediator = distributedCacheMediator;
 
     [WithValidation]
     public async Task<PaginatedCollection<TermCommentsDto>> HandleAsync(ReadAllPaginatedQuery query,
         CancellationToken cancellationToken
     )
     {
-        var result = await _cacheService.GetAsync<List<TermCommentsDto>>(cancellationToken);
+        var result = await _distributedCacheMediator.GetAsync<List<TermCommentsDto>>(cancellationToken);
 
         return result.ToPaginatedCollection(result.Count, query.CountPerPage ?? 0, query.PageNumber ?? 0);
     }
