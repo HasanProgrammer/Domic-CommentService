@@ -1,6 +1,37 @@
 {
   "IsExternalBrokerConsumingAsync": false,
   "IsInternalBrokerConsumingAsync": false,
+  "ExternalTopicConfig": {
+    "Throttle": [
+      {
+        "Active": false,
+        "Topic": "Article",
+        "Limitation": 1000
+      },
+      {
+        "Topic": "CommentService-Retry-Article",
+        "Limitation": 1000
+      },
+      {
+        "Active": false,
+        "Topic": "Term",
+        "Limitation": 1000
+      },
+      {
+        "Topic": "CommentService-Retry-Term",
+        "Limitation": 1000
+      },
+      {
+        "Active": false,
+        "Topic": "User",
+        "Limitation": 1000
+      },
+      {
+        "Topic": "CommentService-Retry-User",
+        "Limitation": 1000
+      }
+    ]
+  },
   "ExternalQueueConfig": {
     "Throttle": [
       {
