@@ -4,7 +4,7 @@ using Domic.Core.Domain.Contracts.Abstracts;
 
 namespace Domic.Domain.ArticleCommentAnswer.Events;
 
-[MessageBroker(Queue = Broker.Comment_User_Queue)]
+[EventConfig(Queue = Broker.Comment_User_Queue)]
 public class UserActived : UpdateDomainEvent<string>
 {
 }

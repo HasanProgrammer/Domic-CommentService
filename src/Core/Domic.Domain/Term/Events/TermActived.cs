@@ -3,5 +3,5 @@ using Domic.Core.Domain.Contracts.Abstracts;
 
 namespace Domic.Domain.Term.Events;
 
-[MessageBroker(Queue = "Comment_Term_Queue")]
+[EventConfig(Queue = "Comment_Term_Queue")]
 public class TermActived : UpdateDomainEvent<string>;

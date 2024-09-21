@@ -4,7 +4,7 @@ using Domic.Core.Domain.Enumerations;
 
 namespace Domic.Domain.TermCommentAnswer.Events;
 
-[MessageBroker(ExchangeType = Exchange.FanOut, Exchange = "Comment_TermCommentAnswer_Exchange")]
+[EventConfig(ExchangeType = Exchange.FanOut, Exchange = "Comment_TermCommentAnswer_Exchange")]
 public class TermCommentAnswerCreated : CreateDomainEvent<string>
 {
     public required string CommentId { get; init; }

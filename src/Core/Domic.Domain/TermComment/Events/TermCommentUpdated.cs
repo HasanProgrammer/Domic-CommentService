@@ -4,7 +4,7 @@ using Domic.Core.Domain.Enumerations;
 
 namespace Domic.Domain.TermComment.Events;
 
-[MessageBroker(ExchangeType = Exchange.FanOut, Exchange = "Comment_TermComment_Exchange")]
+[EventConfig(ExchangeType = Exchange.FanOut, Exchange = "Comment_TermComment_Exchange")]
 public class TermCommentUpdated : UpdateDomainEvent<string>
 {
     public required string Comment { get; init; }
