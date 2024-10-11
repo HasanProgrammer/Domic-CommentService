@@ -5,7 +5,8 @@ services:
   domic.comment.api:
     networks:
       - domic
-    image: comment_service:1.0.0
+    image: comment_service_api_image:1.0.0
+    container_name: "comment_service_api"
     build:
       context: .
       dockerfile: Dockerfile
@@ -16,31 +17,31 @@ services:
       - log:/app/CoreLogs
       - ~\.aspnet\https\:/https/
     environment:
-      - Elastic-Host=http://localhost:9200
-      - Elastic-Username=
-      - Elastic-Password=
-      - E-RabbitMQ-Host=host.docker.internal
+      - Elastic-Host=http://domic.elastic.search:9200
+      - Elastic-Index=comment
+      - Elastic-Username=domic
+      - Elastic-Password=Domic123!@#
+      - E-RabbitMQ-Host=domic.rabbit.mq
       - E-RabbitMQ-Port=5672
-      - E-RabbitMQ-Username=guest
-      - E-RabbitMQ-Password=guest
+      - E-RabbitMQ-Username=domic
+      - E-RabbitMQ-Password=Domic123!@#
       - I-RabbitMQ-Host=
       - I-RabbitMQ-Port=
       - I-RabbitMQ-Username=
       - I-RabbitMQ-Password=
-      - E-RedisConnectionString=domic.comment.redis:6379
-      - I-RedisConnectionString=domic.comment.redis:6379
+      - E-RedisConnectionString=domic.redis:6379
+      - I-RedisConnectionString=
       - MongoConnectionString=
-      - C-SqlServerConnectionString=Server=domic.comment.command.sql.server,1433;Database=CommentService;User ID=sa;Password=Hasan313@@313!!;Persist Security Info=True;MultipleActiveResultSets=True;
-      - Q-SqlServerConnectionString=Server=domic.comment.query.sql.server,1433;Database=CommentService;User ID=sa;Password=Hasan313@@313!!;Persist Security Info=True;MultipleActiveResultSets=True;
+      - C-SqlServerConnectionString=Server=domic.comment.command.sql.server,1433;Database=CommentService;User ID=sa;Password=Domic123!@#;Persist Security Info=True;MultipleActiveResultSets=True;
+      - Q-SqlServerConnectionString=
       - Host=domic.comment.api
       - Port=443
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=https://+:443;http://+:80
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=Dotris313@313%%
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/Karami.WebAPI.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=Domic123!@#
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/Domic.WebAPI.pfx
     depends_on:
       - domic.comment.command.sql.server
-      - domic.comment.query.sql.server
       - domic.comment.redis
   
   domic.comment.command.sql.server:
@@ -52,18 +53,7 @@ services:
       - 1435:1433
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=Hasan313@@313!!
-  
-  domic.comment.query.sql.server:
-    networks:
-      - domic
-    image: 'mcr.microsoft.com/mssql/server'
-    container_name: "comment_query_sql_server"
-    ports:
-      - 1400:1433
-    environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=Hasan313@@313!!
+      - SA_PASSWORD=Domic123!@#
 
   domic.comment.redis:
     networks:
