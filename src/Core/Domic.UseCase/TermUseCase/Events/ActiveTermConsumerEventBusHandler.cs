@@ -37,4 +37,9 @@ public class ActiveTermConsumerEventBusHandler(IDateTime dateTime,
             }
         }
     }
+
+    public void AfterTransactionHandle(TermActived @event){}
+
+    public Task AfterTransactionHandleAsync(TermActived @event, CancellationToken cancellationToken)
+        => Task.CompletedTask;
 }

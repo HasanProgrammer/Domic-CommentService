@@ -61,4 +61,6 @@ public class ActiveUserConsumerEventBusHandler : IConsumerEventBusHandler<UserAc
             _articleCommentAnswerCommandRepository.Change(answer);
         }
     }
+
+    public void AfterTransactionHandle(UserActived @event){}
 }

@@ -49,4 +49,7 @@ public class DeleteCommandHandler : ICommandHandler<DeleteCommand, string>
 
         return Task.FromResult(targetComment.Id);
     }
+
+    public Task AfterTransactionHandleAsync(DeleteCommand message, CancellationToken cancellationToken)
+        => Task.CompletedTask;
 }

@@ -38,4 +38,9 @@ public class DeleteTermConsumerEventBusHandler(
             }
         }
     }
+
+    public void AfterTransactionHandle(TermDeleted @event){}
+
+    public Task AfterTransactionHandleAsync(TermDeleted @event, CancellationToken cancellationToken)
+        => Task.CompletedTask;
 }

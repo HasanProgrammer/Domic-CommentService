@@ -42,4 +42,7 @@ public class UpdateCommandHandler : ICommandHandler<UpdateCommand, string>
 
         return targetComment.Id;
     }
+
+    public Task AfterTransactionHandleAsync(UpdateCommand message, CancellationToken cancellationToken)
+        => Task.CompletedTask;
 }

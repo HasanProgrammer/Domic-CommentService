@@ -43,4 +43,6 @@ public class ActiveArticleConsumerEventBusHandler : IConsumerEventBusHandler<Art
             }
         }
     }
+
+    public void AfterTransactionHandle(ArticleActived @event){}
 }

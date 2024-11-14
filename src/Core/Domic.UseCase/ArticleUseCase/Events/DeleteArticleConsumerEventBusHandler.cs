@@ -43,4 +43,6 @@ public class DeleteArticleConsumerEventBusHandler : IConsumerEventBusHandler<Art
             }
         }
     }
+
+    public void AfterTransactionHandle(ArticleDeleted @event){}
 }
