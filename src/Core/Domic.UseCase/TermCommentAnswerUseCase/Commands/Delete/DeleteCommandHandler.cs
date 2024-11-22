@@ -25,6 +25,8 @@ public class DeleteCommandHandler : ICommandHandler<DeleteCommand, string>
         _repository = repository;
     }
 
+    public Task BeforeHandleAsync(DeleteCommand command, CancellationToken cancellationToken) => Task.CompletedTask;
+
     [WithValidation]
     [WithTransaction]
     public Task<string> HandleAsync(DeleteCommand command, CancellationToken cancellationToken)
@@ -38,6 +40,6 @@ public class DeleteCommandHandler : ICommandHandler<DeleteCommand, string>
         return Task.FromResult(targetAnswer.Id);
     }
 
-    public Task AfterTransactionHandleAsync(DeleteCommand message, CancellationToken cancellationToken)
+    public Task AfterTransactionHandleAsync(DeleteCommand command, CancellationToken cancellationToken)
         => Task.CompletedTask;
 }

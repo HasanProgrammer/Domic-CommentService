@@ -25,6 +25,8 @@ public class UpdateCommandHandler : ICommandHandler<UpdateCommand, string>
         _termCommentCommandRepository = termCommentCommandRepository;
     }
 
+    public Task BeforeHandleAsync(UpdateCommand command, CancellationToken cancellationToken) => Task.CompletedTask;
+
     [WithValidation]
     [WithTransaction]
     [WithCleanCache(Keies = "TermComments")]
@@ -39,6 +41,6 @@ public class UpdateCommandHandler : ICommandHandler<UpdateCommand, string>
         return Task.FromResult(targetComment.Id);
     }
 
-    public Task AfterTransactionHandleAsync(UpdateCommand message, CancellationToken cancellationToken)
+    public Task AfterHandleAsync(UpdateCommand command, CancellationToken cancellationToken)
         => Task.CompletedTask;
 }

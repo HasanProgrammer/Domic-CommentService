@@ -25,6 +25,8 @@ public class UpdateCommandHandler : ICommandHandler<UpdateCommand, string>
         _repository = repository;
     }
 
+    public Task BeforeHandleAsync(UpdateCommand command, CancellationToken cancellationToken) => Task.CompletedTask;
+
     [WithValidation]
     [WithTransaction]
     public Task<string> HandleAsync(UpdateCommand command, CancellationToken cancellationToken)
@@ -38,6 +40,6 @@ public class UpdateCommandHandler : ICommandHandler<UpdateCommand, string>
         return Task.FromResult(answer.Id);
     }
 
-    public Task AfterTransactionHandleAsync(UpdateCommand message, CancellationToken cancellationToken)
+    public Task AfterHandleAsync(UpdateCommand command, CancellationToken cancellationToken)
         => Task.CompletedTask;
 }

@@ -30,6 +30,8 @@ public class DeleteCommandHandler : ICommandHandler<DeleteCommand, string>
         _termCommentAnswerCommandRepository = termCommentAnswerCommandRepository;
     }
 
+    public Task BeforeHandleAsync(DeleteCommand command, CancellationToken cancellationToken) => Task.CompletedTask;
+
     [WithValidation]
     [WithTransaction]
     public Task<string> HandleAsync(DeleteCommand command, CancellationToken cancellationToken)
@@ -50,6 +52,6 @@ public class DeleteCommandHandler : ICommandHandler<DeleteCommand, string>
         return Task.FromResult(targetComment.Id);
     }
 
-    public Task AfterTransactionHandleAsync(DeleteCommand message, CancellationToken cancellationToken)
+    public Task AfterHandleAsync(DeleteCommand command, CancellationToken cancellationToken)
         => Task.CompletedTask;
 }

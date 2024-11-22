@@ -14,7 +14,7 @@ public class ActiveTermConsumerEventBusHandler(IDateTime dateTime,
 )
 : IConsumerEventBusHandler<TermActived>
 {
-    public void Handle(TermActived @event){}
+    public Task BeforeHandleAsync(TermActived @event, CancellationToken cancellationToken) => Task.CompletedTask;
 
     [TransactionConfig(Type = TransactionType.Command)]
     [WithCleanCache(Keies = "TermComments")]
@@ -38,8 +38,6 @@ public class ActiveTermConsumerEventBusHandler(IDateTime dateTime,
         }
     }
 
-    public void AfterTransactionHandle(TermActived @event){}
-
-    public Task AfterTransactionHandleAsync(TermActived @event, CancellationToken cancellationToken)
+    public Task AfterHandleAsync(TermActived @event, CancellationToken cancellationToken)
         => Task.CompletedTask;
 }

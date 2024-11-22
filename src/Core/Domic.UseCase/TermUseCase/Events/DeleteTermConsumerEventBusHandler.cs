@@ -15,7 +15,7 @@ public class DeleteTermConsumerEventBusHandler(
 )
 : IConsumerEventBusHandler<TermDeleted>
 {
-    public void Handle(TermDeleted @event){}
+    public Task BeforeHandleAsync(TermDeleted @event, CancellationToken cancellationToken) => Task.CompletedTask;
 
     [TransactionConfig(Type = TransactionType.Command)]
     [WithCleanCache(Keies = "TermComments")]
@@ -39,8 +39,6 @@ public class DeleteTermConsumerEventBusHandler(
         }
     }
 
-    public void AfterTransactionHandle(TermDeleted @event){}
-
-    public Task AfterTransactionHandleAsync(TermDeleted @event, CancellationToken cancellationToken)
+    public Task AfterHandleAsync(TermDeleted @event, CancellationToken cancellationToken)
         => Task.CompletedTask;
 }

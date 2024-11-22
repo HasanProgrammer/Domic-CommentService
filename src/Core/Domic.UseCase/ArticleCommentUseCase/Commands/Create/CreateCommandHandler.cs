@@ -26,6 +26,8 @@ public class CreateCommandHandler : ICommandHandler<CreateCommand, string>
         _globalUniqueIdGenerator         = globalUniqueIdGenerator;
     }
 
+    public Task BeforeHandleAsync(CreateCommand command, CancellationToken cancellationToken) => Task.CompletedTask;
+
     [WithTransaction]
     public async Task<string> HandleAsync(CreateCommand command, CancellationToken cancellationToken)
     {
@@ -42,6 +44,6 @@ public class CreateCommandHandler : ICommandHandler<CreateCommand, string>
         return newComment.Id;
     }
 
-    public Task AfterTransactionHandleAsync(CreateCommand message, CancellationToken cancellationToken)
+    public Task AfterHandleAsync(CreateCommand command, CancellationToken cancellationToken)
         => Task.CompletedTask;
 }

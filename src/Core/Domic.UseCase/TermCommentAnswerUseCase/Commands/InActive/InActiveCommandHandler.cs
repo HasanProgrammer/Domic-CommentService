@@ -3,8 +3,6 @@
 using Domic.Core.Domain.Contracts.Interfaces;
 using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
-using Domic.Domain.ArticleCommentAnswer.Contracts.Interfaces;
-using Domic.Domain.ArticleCommentAnswer.Entities;
 using Domic.Domain.TermCommentAnswer.Contracts.Interfaces;
 using Domic.Domain.TermCommentAnswer.Entities;
 
@@ -16,18 +14,18 @@ public class InActiveCommandHandler : ICommandHandler<InActiveCommand, string>
 
     private readonly IDateTime _dateTime;
     private readonly ISerializer _serializer;
-    private readonly IJsonWebToken _jsonWebToken;
     private readonly ITermCommentAnswerCommandRepository _repository;
 
-    public InActiveCommandHandler(ITermCommentAnswerCommandRepository repository,
-        IDateTime dateTime, IJsonWebToken jsonWebToken, ISerializer serializer
+    public InActiveCommandHandler(ITermCommentAnswerCommandRepository repository, IDateTime dateTime,
+        ISerializer serializer
     )
     {
         _dateTime = dateTime;
-        _jsonWebToken = jsonWebToken;
         _serializer = serializer;
         _repository = repository;
     }
+
+    public Task BeforeHandleAsync(InActiveCommand command, CancellationToken cancellationToken) => Task.CompletedTask;
 
     [WithValidation]
     [WithTransaction]
@@ -42,6 +40,6 @@ public class InActiveCommandHandler : ICommandHandler<InActiveCommand, string>
         return Task.FromResult(answer.Id);
     }
 
-    public Task AfterTransactionHandleAsync(InActiveCommand message, CancellationToken cancellationToken)
+    public Task AfterTransactionHandleAsync(InActiveCommand command, CancellationToken cancellationToken)
         => Task.CompletedTask;
 }

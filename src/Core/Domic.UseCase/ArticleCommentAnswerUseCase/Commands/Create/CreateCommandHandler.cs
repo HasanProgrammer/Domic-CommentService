@@ -26,6 +26,8 @@ public class CreateCommandHandler : ICommandHandler<CreateCommand, string>
         _articleCommentAnswerCommandRepository = articleCommentAnswerCommandRepository;
     }
 
+    public Task BeforeHandleAsync(CreateCommand command, CancellationToken cancellationToken) => Task.CompletedTask;
+
     [WithValidation]
     [WithTransaction]
     public async Task<string> HandleAsync(CreateCommand command, CancellationToken cancellationToken)
@@ -43,6 +45,6 @@ public class CreateCommandHandler : ICommandHandler<CreateCommand, string>
         return newAnswer.Id;
     }
 
-    public Task AfterTransactionHandleAsync(CreateCommand message, CancellationToken cancellationToken)
+    public Task AfterHandleAsync(CreateCommand message, CancellationToken cancellationToken)
         => Task.CompletedTask;
 }
