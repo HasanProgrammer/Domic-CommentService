@@ -4,17 +4,9 @@ using Domic.UseCase.ArticleCommentAnswerUseCase.Commands.CheckExist;
 
 namespace Domic.UseCase.ArticleCommentAnswerUseCase.Queries.CheckExist;
 
-public class CheckExistCommandHandler : IQueryHandler<CheckExistCommand, bool>
+public class CheckExistCommandHandler(IArticleCommentAnswerCommandRepository articleCommentAnswerCommandRepository) 
+    : IQueryHandler<CheckExistCommand, bool>
 {
-    private readonly IArticleCommentAnswerCommandRepository _articleCommentAnswerCommandRepository;
-
-    public CheckExistCommandHandler(IArticleCommentAnswerCommandRepository articleCommentAnswerCommandRepository) 
-        => _articleCommentAnswerCommandRepository = articleCommentAnswerCommandRepository;
-
-    public async Task<bool> HandleAsync(CheckExistCommand command, CancellationToken cancellationToken)
-    {
-        var result = await _articleCommentAnswerCommandRepository.FindByIdAsync(command.AnswerId, cancellationToken);
-
-        return result is not null;
-    }
+    public Task<bool> HandleAsync(CheckExistCommand command, CancellationToken cancellationToken) 
+        => articleCommentAnswerCommandRepository.IsExistByIdAsync(command.Id, cancellationToken);
 }

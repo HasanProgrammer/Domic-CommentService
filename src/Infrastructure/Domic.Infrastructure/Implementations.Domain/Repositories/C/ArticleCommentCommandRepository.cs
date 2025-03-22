@@ -17,6 +17,9 @@ public class ArticleCommentCommandRepository : IArticleCommentCommandRepository
 
     public void Change(ArticleComment entity) => _sqlContext.ArticleComments.Update(entity);
 
+    public Task<bool> IsExistByIdAsync(string id, CancellationToken cancellationToken) 
+        => _sqlContext.ArticleComments.AnyAsync(comment => comment.Id == id, cancellationToken);
+
     public async Task<ArticleComment> FindByIdAsync(object id, CancellationToken cancellationToken)
         => await _sqlContext.ArticleComments.FirstOrDefaultAsync(comment => comment.Id.Equals(id), cancellationToken);
 

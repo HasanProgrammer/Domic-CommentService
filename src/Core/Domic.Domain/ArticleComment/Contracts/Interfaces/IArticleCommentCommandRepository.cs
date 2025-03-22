@@ -7,14 +7,11 @@ public interface IArticleCommentCommandRepository : ICommandRepository<Entities.
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="articleId"></param>
+    /// <param name="id"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public Task<IEnumerable<Entities.ArticleComment>> FindAllByArticleIdAsync(string articleId, 
-        CancellationToken cancellationToken
-    ) => throw new NotImplementedException();
-
+    public Task<bool> IsExistByIdAsync(string id, CancellationToken cancellationToken);
+    
     /// <summary>
     /// 
     /// </summary>
@@ -23,28 +20,6 @@ public interface IArticleCommentCommandRepository : ICommandRepository<Entities.
     /// <exception cref="NotImplementedException"></exception>
     public IEnumerable<Entities.ArticleComment> FindAllEagerLoadingByArticleId(string articleId) 
         => throw new NotImplementedException();
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="articleId"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public Task<IEnumerable<Entities.ArticleComment>> FindAllEagerLoadingByArticleIdAsync(string articleId, 
-        CancellationToken cancellationToken
-    ) => throw new NotImplementedException();
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="ownerId"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public Task<IEnumerable<Entities.ArticleComment>> FindAllByOwnerIdAsync(string ownerId, 
-        CancellationToken cancellationToken
-    ) => throw new NotImplementedException();
     
     /// <summary>
     /// 

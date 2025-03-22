@@ -4,5 +4,5 @@ namespace Domic.UseCase.ArticleCommentAnswerUseCase.Commands.CheckExist;
 
 public class CheckExistCommand : IQuery<bool>
 {
-    public required string AnswerId { get; set; }
+    public required string Id { get; set; }
 }

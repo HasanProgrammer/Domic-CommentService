@@ -11,6 +11,8 @@ namespace Domic.Domain.ArticleCommentAnswer.Entities;
 
 public class ArticleCommentAnswer : Entity<string>
 {
+    //Fields
+    
     public string CommentId { get; private set; }
     
     /*---------------------------------------------------------------*/
@@ -31,33 +33,35 @@ public class ArticleCommentAnswer : Entity<string>
     private ArticleCommentAnswer() {}
 
     /// <summary>
-    /// 
+    /// Create new ArticleCommentAnswer entity
     /// </summary>
+    /// <param name="globalUniqueIdGenerator"></param>
     /// <param name="dateTime"></param>
-    /// <param name="id"></param>
-    /// <param name="createdBy"></param>
-    /// <param name="createdRole"></param>
+    /// <param name="serializer"></param>
+    /// <param name="identityUser"></param>
     /// <param name="commentId"></param>
     /// <param name="answer"></param>
-    public ArticleCommentAnswer(IDateTime dateTime, string id, string createdBy, string createdRole, 
-        string commentId, string answer
+    public ArticleCommentAnswer(IGlobalUniqueIdGenerator globalUniqueIdGenerator, IDateTime dateTime, 
+        ISerializer serializer, IIdentityUser identityUser, string commentId, string answer
     )
     {
         var nowDateTime        = DateTime.Now;
         var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
 
-        Id          = id;
-        CreatedBy   = createdBy;
+        Id          = globalUniqueIdGenerator.GetRandom(6);
         CommentId   = commentId;
-        CreatedRole = createdRole;
         Answer      = new Answer(answer);
+        
+        //audit
         CreatedAt   = new CreatedAt(nowDateTime, nowPersianDateTime);
+        CreatedBy   = identityUser.GetIdentity();
+        CreatedRole = serializer.Serialize(identityUser.GetRoles());
         
         AddEvent(
             new ArticleCommentAnswerCreated {
-                Id                    = id                 , 
-                CreatedBy             = createdBy          ,
-                CreatedRole           = createdRole        ,
+                Id                    = Id                 , 
+                CreatedBy             = CreatedBy          ,
+                CreatedRole           = CreatedRole        ,
                 CommentId             = commentId          , 
                 Answer                = answer             ,
                 CreatedAt_EnglishDate = nowDateTime        ,
@@ -74,25 +78,50 @@ public class ArticleCommentAnswer : Entity<string>
     /// 
     /// </summary>
     /// <param name="dateTime"></param>
-    /// <param name="updatedBy"></param>
-    /// <param name="updatedRole"></param>
+    /// <param name="serializer"></param>
+    /// <param name="identityUser"></param>
     /// <param name="answer"></param>
-    public void Change(IDateTime dateTime, string updatedBy, string updatedRole, string answer)
+    public void Change(IDateTime dateTime, ISerializer serializer, IIdentityUser identityUser, string answer)
     {
         var nowDateTime        = DateTime.Now;
         var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
 
-        UpdatedBy   = updatedBy;
-        UpdatedRole = updatedRole;
-        Answer      = new Answer(answer);
+        Answer = new Answer(answer);
+        
+        //audit
+        UpdatedBy   = identityUser.GetIdentity();
+        UpdatedRole = serializer.Serialize(identityUser.GetRoles());
         UpdatedAt   = new UpdatedAt(nowDateTime, nowPersianDateTime);
         
         AddEvent(
             new ArticleCommentAnswerUpdated {
                 Id                    = Id          ,
-                UpdatedBy             = updatedBy   ,
-                UpdatedRole           = updatedRole , 
+                UpdatedBy             = UpdatedBy   ,
+                UpdatedRole           = UpdatedRole , 
                 Answer                = answer      ,
+                UpdatedAt_EnglishDate = nowDateTime ,
+                UpdatedAt_PersianDate = nowPersianDateTime
+            }
+        );
+    }
+    
+    public void Active(IDateTime dateTime, ISerializer serializer, IIdentityUser identityUser)
+    {
+        var nowDateTime        = DateTime.Now;
+        var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
+        
+        IsActive = IsActive.Active;
+        
+        //audit
+        UpdatedBy   = identityUser.GetIdentity();
+        UpdatedRole = serializer.Serialize(identityUser.GetRoles());
+        UpdatedAt   = new UpdatedAt(nowDateTime, nowPersianDateTime);
+        
+        AddEvent(
+            new ArticleCommentAnswerActived {
+                Id                    = Id          ,
+                UpdatedBy             = UpdatedBy   ,
+                UpdatedRole           = UpdatedRole , 
                 UpdatedAt_EnglishDate = nowDateTime ,
                 UpdatedAt_PersianDate = nowPersianDateTime
             }
@@ -111,9 +140,11 @@ public class ArticleCommentAnswer : Entity<string>
         var nowDateTime        = DateTime.Now;
         var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
         
+        IsActive = IsActive.Active;
+        
+        //audit
         UpdatedBy   = updatedBy;
         UpdatedRole = updatedRole;
-        IsActive    = IsActive.Active;
         UpdatedAt   = new UpdatedAt(nowDateTime, nowPersianDateTime);
         
         if(raiseEvent)
@@ -140,9 +171,11 @@ public class ArticleCommentAnswer : Entity<string>
         var nowDateTime        = DateTime.Now;
         var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
 
+        IsActive = IsActive.InActive;
+        
+        //audit
         UpdatedBy   = updatedBy;
         UpdatedRole = updatedRole; 
-        IsActive    = IsActive.InActive;
         UpdatedAt   = new UpdatedAt(nowDateTime, nowPersianDateTime);
         
         if(raiseEvent)
@@ -169,9 +202,11 @@ public class ArticleCommentAnswer : Entity<string>
         var nowDateTime        = DateTime.Now;
         var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
 
+        IsDeleted = IsDeleted.Delete;
+        
+        //audit
         UpdatedBy   = updatedBy;
         UpdatedRole = updatedRole;
-        IsDeleted   = IsDeleted.Delete;
         UpdatedAt   = new UpdatedAt(nowDateTime, nowPersianDateTime);
         
         if(raiseEvent)

@@ -5,17 +5,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Domic.Infrastructure.Implementations.Domain.Repositories.C;
 
-public class ArticleCommentAnswerCommandRepository : IArticleCommentAnswerCommandRepository
+public class ArticleCommentAnswerCommandRepository(SQLContext sqlContext) : IArticleCommentAnswerCommandRepository
 {
-    private readonly SQLContext _sqlContext;
+    public Task<bool> IsExistByIdAsync(string id, CancellationToken cancellationToken) 
+        => sqlContext.ArticleCommentAnswers.AnyAsync(answer => answer.Id == id, cancellationToken);
 
-    public ArticleCommentAnswerCommandRepository(SQLContext sqlContext) => _sqlContext = sqlContext;
+    public Task<ArticleCommentAnswer> FindByIdAsync(object id, CancellationToken cancellationToken)
+        => sqlContext.ArticleCommentAnswers.FirstOrDefaultAsync(answer => answer.Id == id as string, cancellationToken);
 
-    public async Task<ArticleCommentAnswer> FindByIdAsync(object id, CancellationToken cancellationToken)
-        => await _sqlContext.ArticleCommentAnswers.FirstOrDefaultAsync(answer => answer.Id.Equals(id), cancellationToken);
+    public Task AddAsync(ArticleCommentAnswer entity, CancellationToken cancellationToken)
+    {
+        sqlContext.ArticleCommentAnswers.Add(entity);
 
-    public async Task AddAsync(ArticleCommentAnswer entity, CancellationToken cancellationToken)
-        => await _sqlContext.ArticleCommentAnswers.AddAsync(entity, cancellationToken);
+        return Task.CompletedTask;
+    }
 
-    public void Change(ArticleCommentAnswer entity) => _sqlContext.ArticleCommentAnswers.Update(entity);
+    public Task ChangeAsync(ArticleCommentAnswer entity, CancellationToken cancellationToken)
+    {
+        sqlContext.ArticleCommentAnswers.Update(entity);
+
+        return Task.CompletedTask;
+    }
 }

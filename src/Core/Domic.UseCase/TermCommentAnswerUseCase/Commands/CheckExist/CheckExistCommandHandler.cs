@@ -13,7 +13,7 @@ public class CheckExistCommandHandler : IQueryHandler<CheckExistCommand, bool>
 
     public async Task<bool> HandleAsync(CheckExistCommand command, CancellationToken cancellationToken)
     {
-        var result = await _termCommentAnswerCommandRepository.FindByIdAsync(command.AnswerId, cancellationToken);
+        var result = await _termCommentAnswerCommandRepository.FindByIdAsync(command.Id, cancellationToken);
 
         return result is not null;
     }

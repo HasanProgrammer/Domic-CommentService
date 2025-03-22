@@ -4,20 +4,14 @@ using Domic.Domain.ArticleComment.Contracts.Interfaces;
 
 namespace Domic.UseCase.ArticleCommentAnswerUseCase.Commands.Create;
 
-public class CreateCommandValidator : IValidator<CreateCommand>
+public class CreateCommandValidator(IArticleCommentCommandRepository articleCommentCommandRepository) 
+    : IValidator<CreateCommand>
 {
-    private readonly IArticleCommentCommandRepository _articleCommentCommandRepository;
-
-    public CreateCommandValidator(IArticleCommentCommandRepository articleCommentCommandRepository) 
-        => _articleCommentCommandRepository = articleCommentCommandRepository;
-
     public async Task<object> ValidateAsync(CreateCommand input, CancellationToken cancellationToken)
     {
-        var targetComment = await _articleCommentCommandRepository.FindByIdAsync(input.CommentId, cancellationToken);
-
-        if (targetComment is null)
+        if (!await articleCommentCommandRepository.IsExistByIdAsync(input.CommentId, cancellationToken))
             throw new UseCaseException(
-                string.Format("نظری با شناسه {0} وجود خارجی ندارد !", input.CommentId ?? "_خالی_")
+                string.Format("نظری با شناسه {0} موجود نمی باشد !", input.CommentId ?? "_خالی_")
             );
 
         return default;
