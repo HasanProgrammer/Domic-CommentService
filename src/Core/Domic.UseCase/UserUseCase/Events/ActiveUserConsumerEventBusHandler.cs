@@ -23,46 +23,48 @@ public class ActiveUserConsumerEventBusHandler : IConsumerEventBusHandler<UserAc
         _articleCommentAnswerCommandRepository = articleCommentAnswerCommandRepository;
     }
 
-    public void BeforeHandle(UserActived @event){}
+    public Task BeforeHandleAsync(UserActived @event, CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
+    }
 
     [TransactionConfig(Type = TransactionType.Command)]
     [WithCleanCache(Keies = Cache.ArticleComments)]
-    public void Handle(UserActived @event)
+    public Task HandleAsync(UserActived @event, CancellationToken cancellationToken)
     {
-        //Active all user comments by answers
+        //active all user comments by answers
         
         var comments =
-            _articleCommentCommandRepository.FindAllEagerLoadingByOwnerIdAsync(@event.Id, default)
-                                            .GetAwaiter()
-                                            .GetResult();
+            await_articleCommentCommandRepository.FindAllEagerLoadingByOwnerIdAsync(@event.Id, cancellationToken);
 
         foreach (var comment in comments)
         {
             comment.Active(_dateTime, @event.UpdatedBy, @event.UpdatedRole, false);
             
-            _articleCommentCommandRepository.Change(comment);
+            await _articleCommentCommandRepository.ChangeAsync(comment, cancellationToken);
 
             foreach (var answer in comment.Answers)
             {
                 answer.Active(_dateTime, @event.UpdatedBy, @event.UpdatedRole, false);
                 
-                _articleCommentAnswerCommandRepository.Change(answer);
+                await _articleCommentAnswerCommandRepository.ChangeAsync(answer, cancellationToken);
             }
         }
         
         //Active all user answers
         
-        var answers = _articleCommentAnswerCommandRepository.FindAllByOwnerIdAsync(@event.Id, default)
-                                                            .GetAwaiter()
-                                                            .GetResult();
+        var answers = await _articleCommentAnswerCommandRepository.FindAllByOwnerIdAsync(@event.Id, cancellationToken);
 
         foreach (var answer in answers)
         {
             answer.Active(_dateTime, @event.UpdatedBy, @event.UpdatedRole);
 
-            _articleCommentAnswerCommandRepository.Change(answer);
+            await _articleCommentAnswerCommandRepository.ChangeAsync(answer, cancellationToken);
         }
     }
 
-    public void AfterHandle(UserActived @event){}
+    public Task AfterHandleAsync(UserActived @event, CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
+    }
 }

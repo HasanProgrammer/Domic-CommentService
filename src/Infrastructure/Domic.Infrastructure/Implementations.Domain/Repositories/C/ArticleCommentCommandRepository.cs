@@ -15,8 +15,6 @@ public class ArticleCommentCommandRepository : IArticleCommentCommandRepository
     public async Task AddAsync(ArticleComment entity, CancellationToken cancellationToken)
         => await _sqlContext.ArticleComments.AddAsync(entity, cancellationToken);
 
-    public void Change(ArticleComment entity) => _sqlContext.ArticleComments.Update(entity);
-
     public Task<bool> IsExistByIdAsync(string id, CancellationToken cancellationToken) 
         => _sqlContext.ArticleComments.AnyAsync(comment => comment.Id == id, cancellationToken);
 
@@ -36,5 +34,12 @@ public class ArticleCommentCommandRepository : IArticleCommentCommandRepository
                                                 .AsNoTracking()
                                                 .Select(projection)
                                                 .ToListAsync(cancellationToken);
+    }
+    
+    public Task ChangeAsync(ArticleComment entity, CancellationToken cancellationToken)
+    {
+        _sqlContext.ArticleComments.Update(entity);
+
+        return Task.CompletedTask;
     }
 }

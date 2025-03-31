@@ -31,4 +31,12 @@ public interface IArticleCommentCommandRepository : ICommandRepository<Entities.
     public Task<IEnumerable<Entities.ArticleComment>> FindAllEagerLoadingByOwnerIdAsync(string ownerId, 
         CancellationToken cancellationToken
     ) => throw new NotImplementedException();
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public Task ChangeAsync(Entities.ArticleComment entity, CancellationToken cancellationToken);
 }
