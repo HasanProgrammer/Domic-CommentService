@@ -8,9 +8,19 @@ namespace Domic.Infrastructure.Implementations.Domain.Repositories.C;
 
 public class TermCommentAnswerAnswerCommandRepository(SQLContext sqlContext) : ITermCommentAnswerCommandRepository
 {
-    public void Add(TermCommentAnswer entity) => sqlContext.TermCommentAnswers.Add(entity);
+    public Task AddAsync(TermCommentAnswer entity, CancellationToken cancellationToken)
+    {
+        sqlContext.TermCommentAnswers.Add(entity);
 
-    public void Change(TermCommentAnswer entity) => sqlContext.TermCommentAnswers.Update(entity);
+        return Task.CompletedTask;
+    }
+
+    public Task ChangeRangeAsync(IEnumerable<TermCommentAnswer> entities, CancellationToken cancellationToken)
+    {
+        sqlContext.TermCommentAnswers.UpdateRange(entities);
+
+        return Task.CompletedTask;
+    }
 
     public Task<TermCommentAnswer> FindByIdAsync(object id, CancellationToken cancellationToken)
         => sqlContext.TermCommentAnswers.FirstOrDefaultAsync(comment => comment.Id.Equals(id), cancellationToken);

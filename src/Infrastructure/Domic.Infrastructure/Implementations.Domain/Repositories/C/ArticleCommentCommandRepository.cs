@@ -21,11 +21,19 @@ public class ArticleCommentCommandRepository : IArticleCommentCommandRepository
     public async Task<ArticleComment> FindByIdAsync(object id, CancellationToken cancellationToken)
         => await _sqlContext.ArticleComments.FirstOrDefaultAsync(comment => comment.Id.Equals(id), cancellationToken);
 
-    public IEnumerable<ArticleComment> FindAllEagerLoadingByArticleId(string articleId)
-        => _sqlContext.ArticleComments.Where(comment => comment.ArticleId.Equals(articleId))
-                                      .Include(comment => comment.Answers)
-                                      .ToList();
+    public Task<List<ArticleComment>> FindAllEagerLoadingByArticleIdAsync(string articleId, 
+        CancellationToken cancellationToken
+    ) => _sqlContext.ArticleComments.AsNoTracking()
+                                    .Where(comment => comment.ArticleId == articleId)
+                                    .Include(comment => comment.Answers)
+                                    .ToListAsync(cancellationToken);
 
+    public Task<List<ArticleComment>> FindAllByOwnerIdAsync(string ownerId, CancellationToken cancellationToken)
+        => _sqlContext.ArticleComments.AsNoTracking()
+                                      .Where(comment => comment.CreatedBy == ownerId)
+                                      .Include(comment => comment.Answers)
+                                      .ToListAsync(cancellationToken);    
+                                      
     public async Task<IEnumerable<TViewModel>> FindAllEagerLoadingByProjectionAsync<TViewModel>(
         Expression<Func<ArticleComment, TViewModel>> projection, CancellationToken cancellationToken
     )
@@ -39,6 +47,13 @@ public class ArticleCommentCommandRepository : IArticleCommentCommandRepository
     public Task ChangeAsync(ArticleComment entity, CancellationToken cancellationToken)
     {
         _sqlContext.ArticleComments.Update(entity);
+
+        return Task.CompletedTask;
+    }
+
+    public Task ChangeRangeAsync(IEnumerable<ArticleComment> entities, CancellationToken cancellationToken)
+    {
+        _sqlContext.ArticleComments.UpdateRange(entities);
 
         return Task.CompletedTask;
     }

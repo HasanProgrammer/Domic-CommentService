@@ -15,8 +15,16 @@ public interface IArticleCommentAnswerCommandRepository : ICommandRepository<Ent
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="entity"></param>
+    /// <param name="ownerId"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public Task ChangeAsync(Entities.ArticleCommentAnswer entity, CancellationToken cancellationToken);
+    public Task<List<Entities.ArticleCommentAnswer>> FindAllByOwnerIdAsync(string ownerId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="entities"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public Task ChangeRangeAsync(IEnumerable<Entities.ArticleCommentAnswer> entities, CancellationToken cancellationToken);
 }

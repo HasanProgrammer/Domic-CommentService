@@ -1,4 +1,5 @@
-﻿using Domic.Core.Domain.Contracts.Abstracts;
+﻿using System.Security.Principal;
+using Domic.Core.Domain.Contracts.Abstracts;
 using Domic.Core.Domain.Contracts.Interfaces;
 using Domic.Core.Domain.Enumerations;
 using Domic.Core.Domain.ValueObjects;
@@ -35,12 +36,12 @@ public class TermComment : Entity<string>
     /// </summary>
     /// <param name="dateTime"></param>
     /// <param name="globalUniqueIdGenerator"></param>
+    /// <param name="identity"></param>
     /// <param name="termId"></param>
-    /// <param name="createdBy"></param>
-    /// <param name="createdRole"></param>
+    /// <param name="serializer"></param>
     /// <param name="comment"></param>
-    public TermComment(IDateTime dateTime, IGlobalUniqueIdGenerator globalUniqueIdGenerator, string termId, 
-        string createdBy, string createdRole, string comment
+    public TermComment(IDateTime dateTime, IGlobalUniqueIdGenerator globalUniqueIdGenerator, IIdentityUser identity, string termId, 
+        ISerializer serializer, string comment
     )
     {
         var nowDatetime = DateTime.Now;
@@ -49,8 +50,10 @@ public class TermComment : Entity<string>
         Id = globalUniqueIdGenerator.GetRandom(6);
         TermId = termId;
         Comment = new Comment(comment);
-        CreatedBy = createdBy;
-        CreatedRole = createdRole;
+
+        //audit
+        CreatedBy = identity.GetIdentity();
+        CreatedRole = serializer.Serialize(identity.GetRoles());
         CreatedAt = new CreatedAt(nowDatetime, nowPersianDate);
         
         AddEvent(
@@ -58,8 +61,8 @@ public class TermComment : Entity<string>
                 Id = Id,
                 TermId = termId,
                 Comment = comment,
-                CreatedBy = createdBy,
-                CreatedRole = createdRole,
+                CreatedBy = CreatedBy,
+                CreatedRole = CreatedRole,
                 CreatedAt_EnglishDate = nowDatetime,
                 CreatedAt_PersianDate = nowPersianDate
             }
@@ -70,28 +73,66 @@ public class TermComment : Entity<string>
     
     //Behaviors
     
-    public void Change(IDateTime dateTime, string updatedBy, string updatedRole, string comment)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dateTime"></param>
+    /// <param name="identityUser"></param>
+    /// <param name="serializer"></param>
+    /// <param name="comment"></param>
+    public void Change(IDateTime dateTime, IIdentityUser identityUser, ISerializer serializer, string comment)
     {
         var nowDateTime        = DateTime.Now;
         var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
 
-        UpdatedBy   = updatedBy;
-        UpdatedRole = updatedRole;
-        Comment     = new Comment(comment);
+        Comment = new Comment(comment);
+
+        //audit
+        UpdatedBy   = identityUser.GetIdentity();
+        UpdatedRole = serializer.Serialize(identityUser.GetRoles());
         UpdatedAt   = new UpdatedAt(nowDateTime, nowPersianDateTime);
         
         AddEvent(
             new TermCommentUpdated {
                 Id                    = Id          ,
                 Comment               = comment     ,
-                UpdatedBy             = updatedBy   ,
-                UpdatedRole           = updatedRole ,
+                UpdatedBy             = UpdatedBy   ,
+                UpdatedRole           = UpdatedRole ,
                 UpdatedAt_EnglishDate = nowDateTime ,
                 UpdatedAt_PersianDate = nowPersianDateTime
             }
         );
     }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dateTime"></param>
+    /// <param name="identityUser"></param>
+    /// <param name="serializer"></param>
+    public void InActive(IDateTime dateTime, IIdentityUser identityUser, ISerializer serializer)
+    {
+        var nowDateTime        = DateTime.Now;
+        var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
+
+        IsActive = IsActive.InActive;
+
+        //audit
+        UpdatedRole = serializer.Serialize(identityUser.GetRoles());
+        UpdatedBy   = identityUser.GetIdentity();
+        UpdatedAt   = new UpdatedAt(nowDateTime, nowPersianDateTime);
+        
+        AddEvent(
+            new TermCommentInActived {
+                Id                    = Id          ,
+                UpdatedBy             = UpdatedBy   ,
+                UpdatedRole           = UpdatedRole ,
+                UpdatedAt_EnglishDate = nowDateTime ,
+                UpdatedAt_PersianDate = nowPersianDateTime
+            }
+        ); 
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -104,7 +145,9 @@ public class TermComment : Entity<string>
         var nowDateTime        = DateTime.Now;
         var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
 
-        IsActive    = IsActive.InActive;
+        IsActive = IsActive.InActive;
+
+        //audit
         UpdatedRole = updatedRole;
         UpdatedBy   = updatedBy;
         UpdatedAt   = new UpdatedAt(nowDateTime, nowPersianDateTime);
@@ -121,6 +164,35 @@ public class TermComment : Entity<string>
             );
     }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dateTime"></param>
+    /// <param name="identityUser"></param>
+    /// <param name="serializer"></param>
+    public void Active(IDateTime dateTime, IIdentityUser identityUser, ISerializer serializer)
+    {
+        var nowDateTime        = DateTime.Now;
+        var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
+
+        IsActive = IsActive.Active;
+
+        //audit
+        UpdatedRole = serializer.Serialize(identityUser.GetRoles());
+        UpdatedBy   = identityUser.GetIdentity();
+        UpdatedAt   = new UpdatedAt(nowDateTime, nowPersianDateTime);
+        
+        AddEvent(
+            new TermCommentInActived {
+                Id                    = Id          ,
+                UpdatedBy             = UpdatedBy   , 
+                UpdatedRole           = UpdatedRole , 
+                UpdatedAt_EnglishDate = nowDateTime ,
+                UpdatedAt_PersianDate = nowPersianDateTime
+            }
+        );
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -148,6 +220,35 @@ public class TermComment : Entity<string>
                     UpdatedAt_PersianDate = nowPersianDateTime
                 }
             );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dateTime"></param>
+    /// <param name="identityUser"></param>
+    /// <param name="serializer"></param>
+    public void Delete(IDateTime dateTime, IIdentityUser identityUser, ISerializer serializer)
+    {
+        var nowDateTime        = DateTime.Now;
+        var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
+
+        IsDeleted = IsDeleted.Delete;
+
+        //audit
+        UpdatedRole = serializer.Serialize(identityUser.GetRoles());
+        UpdatedBy   = identityUser.GetIdentity();
+        UpdatedAt   = new UpdatedAt(nowDateTime, nowPersianDateTime);
+        
+        AddEvent(
+            new TermCommentDeleted {
+                Id                    = Id          ,
+                UpdatedBy             = UpdatedBy   , 
+                UpdatedRole           = UpdatedRole ,
+                UpdatedAt_EnglishDate = nowDateTime ,
+                UpdatedAt_PersianDate = nowPersianDateTime
+            }
+        );
     }
 
     /// <summary>

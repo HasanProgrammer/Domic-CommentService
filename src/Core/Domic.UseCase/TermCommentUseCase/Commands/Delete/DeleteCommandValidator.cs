@@ -14,11 +14,11 @@ public class DeleteCommandValidator : IValidator<DeleteCommand>
     public async Task<object> ValidateAsync(DeleteCommand input, CancellationToken cancellationToken)
     {
         var comment =
-            await _termCommentCommandRepository.FindByIdEagerLoadingAsync(input.CommentId, cancellationToken);
+            await _termCommentCommandRepository.FindByIdEagerLoadingAsync(input.Id, cancellationToken);
 
         if (comment is null)
             throw new UseCaseException(
-                string.Format("موجودیتی با شناسه {0} وجود خارجی ندارد !", input.CommentId ?? "_خالی_")
+                string.Format("موجودیتی با شناسه {0} وجود خارجی ندارد !", input.Id ?? "_خالی_")
             );
 
         return comment;

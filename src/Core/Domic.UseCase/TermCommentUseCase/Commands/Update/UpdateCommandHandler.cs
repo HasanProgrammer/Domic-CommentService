@@ -5,40 +5,33 @@ using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
 using Domic.Domain.TermComment.Contracts.Interfaces;
 using Domic.Domain.TermComment.Entities;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Domic.UseCase.TermCommentUseCase.Commands.Update;
 
-public class UpdateCommandHandler : ICommandHandler<UpdateCommand, string>
+public class UpdateCommandHandler(
+    IDateTime dateTime, 
+    ISerializer serializer,
+    [FromKeyedServices("Http2")] IIdentityUser identityUser,
+    ITermCommentCommandRepository termCommentCommandRepository
+) : ICommandHandler<UpdateCommand, string>
 {
     private readonly object _validationResult;
-
-    private readonly IDateTime _dateTime;
-    private readonly ISerializer _serializer;
-    private readonly ITermCommentCommandRepository _termCommentCommandRepository;
-
-    public UpdateCommandHandler(ITermCommentCommandRepository termCommentCommandRepository,
-        IDateTime dateTime, ISerializer serializer
-    )
-    {
-        _dateTime = dateTime;
-        _serializer = serializer;
-        _termCommentCommandRepository = termCommentCommandRepository;
-    }
 
     public Task BeforeHandleAsync(UpdateCommand command, CancellationToken cancellationToken) => Task.CompletedTask;
 
     [WithValidation]
     [WithTransaction]
     [WithCleanCache(Keies = "TermComments")]
-    public Task<string> HandleAsync(UpdateCommand command, CancellationToken cancellationToken)
+    public async Task<string> HandleAsync(UpdateCommand command, CancellationToken cancellationToken)
     {
         var targetComment = _validationResult as TermComment;
 
-        targetComment.Change(_dateTime, command.UserId, _serializer.Serialize(command.UserRoles), command.Comment);
+        targetComment.Change(dateTime, identityUser, serializer, command.Comment);
 
-        _termCommentCommandRepository.Change(targetComment);
+        await termCommentCommandRepository.ChangeAsync(targetComment, cancellationToken);
 
-        return Task.FromResult(targetComment.Id);
+        return targetComment.Id;
     }
 
     public Task AfterHandleAsync(UpdateCommand command, CancellationToken cancellationToken)

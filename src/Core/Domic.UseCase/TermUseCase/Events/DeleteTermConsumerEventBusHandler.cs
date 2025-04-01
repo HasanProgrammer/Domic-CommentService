@@ -5,6 +5,7 @@ using Domic.Core.UseCase.Contracts.Interfaces;
 using Domic.Domain.Term.Events;
 using Domic.Domain.TermComment.Contracts.Interfaces;
 using Domic.Domain.TermCommentAnswer.Contracts.Interfaces;
+using Domic.Domain.TermCommentAnswer.Entities;
 
 namespace Domic.UseCase.TermUseCase.Events;
 
@@ -29,13 +30,17 @@ public class DeleteTermConsumerEventBusHandler(
             comment.Delete(dateTime, @event.UpdatedBy, @event.UpdatedRole, false);
             
             termCommentCommandRepository.Change(comment);
+
+            var answers = new List<TermCommentAnswer>();
             
             foreach (var answer in comment.Answers)
             {
                 answer.Delete(dateTime, @event.UpdatedBy, @event.UpdatedRole, false);
                 
-                termCommentAnswerCommandRepository.Change(answer);
+                answers.Add(answer);
             }
+
+            await termCommentAnswerCommandRepository.ChangeRangeAsync(answers, cancellationToken);
         }
     }
 

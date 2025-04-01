@@ -22,8 +22,34 @@ public class ActiveArticleConsumerEventBusHandler : IConsumerEventBusHandler<Art
         _articleCommentCommandRepository       = articleCommentCommandRepository;
         _articleCommentAnswerCommandRepository = articleCommentAnswerCommandRepository;
     }
+    
+    public Task BeforeHandleAsync(ArticleActived @event, CancellationToken cancellationToken)
+        => Task.CompletedTask;
 
-    public void BeforeHandle(ArticleActived @event){}
+    [WithCleanCache(Keies = Cache.ArticleComments)]
+    [TransactionConfig(Type = TransactionType.Command)]
+    public async Task HandleAsync(ArticleActived @event, CancellationToken cancellationToken)
+    {
+        var comments = await _articleCommentCommandRepository.FindAllEagerLoadingByArticleIdAsync(@event.Id, cancellationToken);
+
+        foreach (var comment in comments)
+        {
+            comment.Active(_dateTime, @event.UpdatedBy, @event.UpdatedRole, false);
+            
+            await _articleCommentCommandRepository.ChangeAsync(comment, cancellationToken);
+            
+            foreach (var answer in comment.Answers)
+            {
+                answer.Active(_dateTime, @event.UpdatedBy, @event.UpdatedRole, false);
+                
+                _articleCommentAnswerCommandRepository.Change(answer);
+            }
+        }
+        
+    }   
+
+    public Task AfterHandleAsync(ArticleActived @event, CancellationToken cancellationToken)
+        => Task.CompletedTask;
 
     [TransactionConfig(Type = TransactionType.Command)]
     [WithCleanCache(Keies = Cache.ArticleComments)]

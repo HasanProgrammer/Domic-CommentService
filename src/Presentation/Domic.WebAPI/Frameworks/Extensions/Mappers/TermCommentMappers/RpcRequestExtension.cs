@@ -53,7 +53,7 @@ public static partial class RpcRequestExtension
         Username = username,
         UserRoles = userRoles,
         UserPermissions = userPermissions,
-        CommentId = request.CommentId.Value,
+        Id = request.CommentId.Value,
         Comment = request.Comment.Value
     };
 
@@ -74,7 +74,7 @@ public static partial class RpcRequestExtension
         Username = username,
         UserRoles = userRoles,
         UserPermissions = userPermissions,
-        CommentId = request.CommentId.Value
+        Id = request.CommentId.Value
     };
 
     /// <summary>
@@ -94,7 +94,7 @@ public static partial class RpcRequestExtension
         Username = username,
         UserRoles = userRoles,
         UserPermissions = userPermissions,
-        CommentId = request.CommentId.Value
+        Id = request.CommentId.Value
     };
 
     /// <summary>
@@ -114,6 +114,6 @@ public static partial class RpcRequestExtension
         Username = username,
         UserRoles = userRoles,
         UserPermissions = userPermissions,
-        CommentId = request.CommentId.Value
+        Id = request.CommentId.Value
     };
 }

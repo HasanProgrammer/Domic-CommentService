@@ -18,8 +18,9 @@ public interface IArticleCommentCommandRepository : ICommandRepository<Entities.
     /// <param name="articleId"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public IEnumerable<Entities.ArticleComment> FindAllEagerLoadingByArticleId(string articleId) 
-        => throw new NotImplementedException();
+    public Task<List<Entities.ArticleComment>> FindAllEagerLoadingByArticleIdAsync(string articleId, 
+        CancellationToken cancellationToken
+    );
     
     /// <summary>
     /// 
@@ -28,15 +29,15 @@ public interface IArticleCommentCommandRepository : ICommandRepository<Entities.
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public Task<IEnumerable<Entities.ArticleComment>> FindAllEagerLoadingByOwnerIdAsync(string ownerId, 
+    public Task<List<Entities.ArticleComment>> FindAllEagerLoadingByOwnerIdAsync(string ownerId, 
         CancellationToken cancellationToken
     ) => throw new NotImplementedException();
 
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="entity"></param>
+    /// <param name="entities"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public Task ChangeAsync(Entities.ArticleComment entity, CancellationToken cancellationToken);
+    public Task ChangeRangeAsync(IEnumerable<Entities.ArticleComment> entities, CancellationToken cancellationToken);
 }

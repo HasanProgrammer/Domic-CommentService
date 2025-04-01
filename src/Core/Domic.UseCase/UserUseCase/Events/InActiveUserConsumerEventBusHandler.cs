@@ -1,4 +1,4 @@
-﻿using Domic.Core.Common.ClassConsts;
+using Domic.Core.Common.ClassConsts;
 using Domic.Core.Domain.Contracts.Interfaces;
 using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
@@ -10,13 +10,13 @@ using Domic.Domain.ArticleCommentAnswer.Events;
 
 namespace Domic.UseCase.UserUseCase.Events;
 
-public class ActiveUserConsumerEventBusHandler : IConsumerEventBusHandler<UserActived>
+public class InActiveUserConsumerEventBusHandler : IConsumerEventBusHandler<UserInActived>
 {
     private readonly IDateTime                              _dateTime;
     private readonly IArticleCommentCommandRepository       _articleCommentCommandRepository;
     private readonly IArticleCommentAnswerCommandRepository _articleCommentAnswerCommandRepository;
 
-    public ActiveUserConsumerEventBusHandler(IArticleCommentCommandRepository articleCommentCommandRepository,
+    public InActiveUserConsumerEventBusHandler(IArticleCommentCommandRepository articleCommentCommandRepository,
         IArticleCommentAnswerCommandRepository articleCommentAnswerCommandRepository, IDateTime dateTime
     )
     {
@@ -25,14 +25,14 @@ public class ActiveUserConsumerEventBusHandler : IConsumerEventBusHandler<UserAc
         _articleCommentAnswerCommandRepository = articleCommentAnswerCommandRepository;
     }
 
-    public Task BeforeHandleAsync(UserActived @event, CancellationToken cancellationToken)
+    public Task BeforeHandleAsync(UserInActived @event, CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }
 
     [TransactionConfig(Type = TransactionType.Command)]
     [WithCleanCache(Keies = Cache.ArticleComments)]
-    public async Task HandleAsync(UserActived @event, CancellationToken cancellationToken)
+    public async Task HandleAsync(UserInActived @event, CancellationToken cancellationToken)
     {
         //active all user comments by answers
         
@@ -44,13 +44,13 @@ public class ActiveUserConsumerEventBusHandler : IConsumerEventBusHandler<UserAc
 
         foreach (var comment in comments)
         {
-            comment.Active(_dateTime, @event.UpdatedBy, @event.UpdatedRole, false);
+            comment.InActive(_dateTime, @event.UpdatedBy, @event.UpdatedRole, false);
 
             articleComments.Add(comment);
 
             foreach (var answer in comment.Answers)
             {
-                answer.Active(_dateTime, @event.UpdatedBy, @event.UpdatedRole, false);
+                answer.InActive(_dateTime, @event.UpdatedBy, @event.UpdatedRole, false);
 
                 articleCommentAnswers.Add(answer);
             }
@@ -67,7 +67,7 @@ public class ActiveUserConsumerEventBusHandler : IConsumerEventBusHandler<UserAc
 
         foreach (var answer in answers)
         {
-            answer.Active(_dateTime, @event.UpdatedBy, @event.UpdatedRole);
+            answer.InActive(_dateTime, @event.UpdatedBy, @event.UpdatedRole);
 
             userArticleCommentAnswers.Add(answer);
         }
@@ -75,7 +75,7 @@ public class ActiveUserConsumerEventBusHandler : IConsumerEventBusHandler<UserAc
         await _articleCommentAnswerCommandRepository.ChangeRangeAsync(userArticleCommentAnswers, cancellationToken);
     }
 
-    public Task AfterHandleAsync(UserActived @event, CancellationToken cancellationToken)
+    public Task AfterHandleAsync(UserInActived @event, CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }
