@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Domic.UseCase.TermCommentUseCase.Commands.Delete;
 
-    public class DeleteCommandHandler(
+public class DeleteCommandHandler(
     IDateTime dateTime,
     ISerializer serializer,
     [FromKeyedServices("Http2")] IIdentityUser identityUser,

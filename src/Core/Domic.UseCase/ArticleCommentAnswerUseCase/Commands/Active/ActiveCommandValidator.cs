@@ -13,7 +13,7 @@ public class ActiveCommandValidator(IArticleCommentAnswerCommandRepository artic
 
         if (answer is null)
             throw new UseCaseException(
-                string.Format("موجودیتی با شناسه {0} موجود نمی باشد !", input.Id ?? "_خالی_")
+                string.Format("موجودیتی با شناسه {0} یافت نشد !", input.Id ?? "_خالی_")
             );
 
         return answer;

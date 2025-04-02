@@ -74,7 +74,7 @@ public static partial class RpcRequestExtension
         Username = username,
         UserRoles = userRoles,
         UserPermissions = userPermissions,
-        AnswerId = request.AnswerId.Value
+        Id = request.AnswerId.Value
     };
 
     /// <summary>
@@ -114,6 +114,6 @@ public static partial class RpcRequestExtension
         Username = username,
         UserRoles = userRoles,
         UserPermissions = userPermissions,
-        AnswerId = request.AnswerId.Value
+        Id = request.AnswerId.Value
     };
 }

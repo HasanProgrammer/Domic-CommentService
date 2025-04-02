@@ -9,7 +9,7 @@ using Domic.UseCase.ArticleCommentAnswerUseCase.Commands.Update;
 namespace Domic.WebAPI.Frameworks.Extensions.Mappers.ArticleCommentAnswerMappers;
 
 //Query
-public static partial class RpcRequestExtension
+public static partial class  RpcRequestExtension
 {
     /// <summary>
     /// 
@@ -142,7 +142,7 @@ public static partial class RpcRequestExtension
         {
             Request = new DeleteCommand {
                 Token    = token ,
-                TargetId = request.TargetId.Value
+                Id = request.TargetId.Value
             };
         }
 

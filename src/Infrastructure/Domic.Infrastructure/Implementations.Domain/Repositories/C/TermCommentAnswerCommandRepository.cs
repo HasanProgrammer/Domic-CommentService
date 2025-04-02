@@ -15,6 +15,13 @@ public class TermCommentAnswerAnswerCommandRepository(SQLContext sqlContext) : I
         return Task.CompletedTask;
     }
 
+    public Task ChangeAsync(TermCommentAnswer entity, CancellationToken cancellationToken)
+    {
+        sqlContext.TermCommentAnswers.Update(entity);
+
+        return Task.CompletedTask;
+    }
+
     public Task ChangeRangeAsync(IEnumerable<TermCommentAnswer> entities, CancellationToken cancellationToken)
     {
         sqlContext.TermCommentAnswers.UpdateRange(entities);
@@ -37,4 +44,7 @@ public class TermCommentAnswerAnswerCommandRepository(SQLContext sqlContext) : I
                                             .AsNoTracking()
                                             .Select(projection)
                                             .ToListAsync(cancellationToken);
+
+    public Task<bool> IsExistByIdAsync(string id, CancellationToken cancellationToken)
+        => sqlContext.TermCommentAnswers.AnyAsync(comment => comment.Id == id, cancellationToken); 
 }

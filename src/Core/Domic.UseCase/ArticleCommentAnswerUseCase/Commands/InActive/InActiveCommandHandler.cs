@@ -5,43 +5,33 @@ using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
 using Domic.Domain.ArticleCommentAnswer.Contracts.Interfaces;
 using Domic.Domain.ArticleCommentAnswer.Entities;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Domic.UseCase.ArticleCommentAnswerUseCase.Commands.InActive;
 
-public class InActiveCommandHandler : ICommandHandler<InActiveCommand, string>
+public class InActiveCommandHandler(
+    IArticleCommentAnswerCommandRepository articleCommentAnswerCommandRepository,
+    IDateTime dateTime,
+    ISerializer serializer,
+    [FromKeyedServices("Http2")] IIdentityUser identityUser
+) : ICommandHandler<InActiveCommand, string>
 {
     private readonly object _validationResult;
 
-    private readonly IDateTime                              _dateTime;
-    private readonly ISerializer                            _serializer;
-    private readonly IJsonWebToken                          _jsonWebToken;
-    private readonly IArticleCommentAnswerCommandRepository _articleCommentAnswerCommandRepository;
-
-    public InActiveCommandHandler(IArticleCommentAnswerCommandRepository articleCommentAnswerCommandRepository, 
-        IDateTime dateTime, IJsonWebToken jsonWebToken, ISerializer serializer
-    )
-    {
-        _dateTime                              = dateTime;
-        _jsonWebToken                          = jsonWebToken;
-        _serializer                            = serializer;
-        _articleCommentAnswerCommandRepository = articleCommentAnswerCommandRepository;
-    }
-
-    public Task BeforeHandleAsync(InActiveCommand command, CancellationToken cancellationToken) => Task.CompletedTask;
+    public Task BeforeHandleAsync(InActiveCommand command, CancellationToken cancellationToken) 
+        => Task.CompletedTask;
 
     [WithValidation]
     [WithTransaction]
-    public Task<string> HandleAsync(InActiveCommand command, CancellationToken cancellationToken)
+    public async Task<string> HandleAsync(InActiveCommand command, CancellationToken cancellationToken)
     {
-        var answer      = _validationResult as ArticleCommentAnswer;
-        var updatedBy   = _jsonWebToken.GetIdentityUserId(command.Token);
-        var updatedRole = _serializer.Serialize( _jsonWebToken.GetRoles(command.Token) );
+        var answer = _validationResult as ArticleCommentAnswer;
         
-        answer.InActive(_dateTime, updatedBy, updatedRole);
+        answer.InActive(dateTime, serializer, identityUser);
 
-        _articleCommentAnswerCommandRepository.Change(answer);
+        await articleCommentAnswerCommandRepository.ChangeAsync(answer, cancellationToken);
 
-        return Task.FromResult(answer.Id);
+        return answer.Id;
     }
 
     public Task AfterHandleAsync(InActiveCommand message, CancellationToken cancellationToken)

@@ -4,47 +4,48 @@ using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
 using Domic.Domain.Article.Events;
 using Domic.Domain.ArticleComment.Contracts.Interfaces;
+using Domic.Domain.ArticleComment.Entities;
 using Domic.Domain.ArticleCommentAnswer.Contracts.Interfaces;
+using Domic.Domain.ArticleCommentAnswer.Entities;
 
 namespace Domic.UseCase.ArticleUseCase.Events;
 
-public class DeleteArticleConsumerEventBusHandler : IConsumerEventBusHandler<ArticleDeleted>
+public class DeleteArticleConsumerEventBusHandler(
+    IArticleCommentCommandRepository       articleCommentCommandRepository,
+    IArticleCommentAnswerCommandRepository articleCommentAnswerCommandRepository,
+    IDateTime                              dateTime
+) : IConsumerEventBusHandler<ArticleDeleted>
 {
-    private readonly IDateTime                              _dateTime;
-    private readonly IArticleCommentCommandRepository       _articleCommentCommandRepository;
-    private readonly IArticleCommentAnswerCommandRepository _articleCommentAnswerCommandRepository;
+    public Task BeforeHandleAsync(ArticleDeleted @event, CancellationToken cancellationToken)
+        => Task.CompletedTask;
 
-    public DeleteArticleConsumerEventBusHandler(IArticleCommentCommandRepository articleCommentCommandRepository,
-        IArticleCommentAnswerCommandRepository articleCommentAnswerCommandRepository, IDateTime dateTime
-    )
-    {
-        _dateTime                              = dateTime;
-        _articleCommentCommandRepository       = articleCommentCommandRepository;
-        _articleCommentAnswerCommandRepository = articleCommentAnswerCommandRepository;
-    }
-
-    public void BeforeHandle(ArticleDeleted @event){}
-
-    [TransactionConfig(Type = TransactionType.Command)]
     [WithCleanCache(Keies = Cache.ArticleComments)]
-    public void Handle(ArticleDeleted @event)
+    [TransactionConfig(Type = TransactionType.Command)]
+    public async Task HandleAsync(ArticleDeleted @event, CancellationToken cancellationToken)
     {
-        var comments = _articleCommentCommandRepository.FindAllEagerLoadingByArticleId(@event.Id);
+        var comments = await articleCommentCommandRepository.FindAllEagerLoadingByArticleIdAsync(@event.Id, cancellationToken);
+
+        var changedComments = new List<ArticleComment>();
+        var changedAnswers = new List<ArticleCommentAnswer>();
 
         foreach (var comment in comments)
         {
-            comment.Delete(_dateTime, @event.UpdatedBy, @event.UpdatedRole, false);
-            
-            _articleCommentCommandRepository.Change(comment);
-            
+            comment.Delete(dateTime, @event.UpdatedBy, @event.UpdatedRole, false);
+
+            changedComments.Add(comment);
+                        
             foreach (var answer in comment.Answers)
             {
-                answer.Delete(_dateTime, @event.UpdatedBy, @event.UpdatedRole, false);
-                
-                _articleCommentAnswerCommandRepository.Change(answer);
+                answer.Delete(dateTime, @event.UpdatedBy, @event.UpdatedRole, false);
+    
+                changedAnswers.Add(answer);
             }
         }
+
+        await articleCommentCommandRepository.ChangeRangeAsync(changedComments, cancellationToken);
+        await articleCommentAnswerCommandRepository.ChangeRangeAsync(changedAnswers, cancellationToken);
     }
 
-    public void AfterHandle(ArticleDeleted @event){}
+    public Task AfterHandleAsync(ArticleDeleted @event, CancellationToken cancellationToken)
+        => Task.CompletedTask;
 }

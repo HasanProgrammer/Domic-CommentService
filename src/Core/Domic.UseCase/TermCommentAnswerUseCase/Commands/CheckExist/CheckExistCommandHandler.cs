@@ -1,20 +1,10 @@
 ﻿using Domic.Core.UseCase.Contracts.Interfaces;
 using Domic.Domain.TermCommentAnswer.Contracts.Interfaces;
-using Domic.UseCase.ArticleCommentAnswerUseCase.Commands.CheckExist;
-
+using Domic.UseCase.TermCommentAnswerUseCase.Commands.CheckExist;
 namespace Domic.UseCase.TermCommentAnswerUseCase.Queries.CheckExist;
 
-public class CheckExistCommandHandler : IQueryHandler<CheckExistCommand, bool>
+public class CheckExistCommandHandler(ITermCommentAnswerCommandRepository termCommentAnswerCommandRepository) : IQueryHandler<CheckExistCommand, bool>
 {
-    private readonly ITermCommentAnswerCommandRepository _termCommentAnswerCommandRepository;
-
-    public CheckExistCommandHandler(ITermCommentAnswerCommandRepository termCommentAnswerCommandRepository) 
-        => _termCommentAnswerCommandRepository = termCommentAnswerCommandRepository;
-
-    public async Task<bool> HandleAsync(CheckExistCommand command, CancellationToken cancellationToken)
-    {
-        var result = await _termCommentAnswerCommandRepository.FindByIdAsync(command.Id, cancellationToken);
-
-        return result is not null;
-    }
+    public async Task<bool> HandleAsync(CheckExistCommand command, CancellationToken cancellationToken) 
+        => await termCommentAnswerCommandRepository.IsExistByIdAsync(command.Id, cancellationToken);
 }

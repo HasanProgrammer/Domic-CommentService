@@ -5,20 +5,16 @@ using Domic.UseCase.ArticleCommentAnswerUseCase.Commands.Delete;
 
 namespace Domic.UseCase.ArticleCommentAnswerUseCase.Commands.SoftDelete;
 
-public class DeleteCommandValidator : IValidator<DeleteCommand>
+public class DeleteCommandValidator(IArticleCommentAnswerCommandRepository articleCommentAnswerCommandRepository) 
+    : IValidator<DeleteCommand>
 {
-    private readonly IArticleCommentAnswerCommandRepository _articleCommentAnswerCommandRepository;
-
-    public DeleteCommandValidator(IArticleCommentAnswerCommandRepository articleCommentAnswerCommandRepository) 
-        => _articleCommentAnswerCommandRepository = articleCommentAnswerCommandRepository;
-
     public async Task<object> ValidateAsync(DeleteCommand input, CancellationToken cancellationToken)
     {
-        var result = await _articleCommentAnswerCommandRepository.FindByIdAsync(input.TargetId, cancellationToken);
+        var result = await articleCommentAnswerCommandRepository.FindByIdAsync(input.Id, cancellationToken);
 
         if (result is null)
             throw new UseCaseException(
-                string.Format("موجودیتی با شناسه {0} وجود خارجی ندارد !", input.TargetId ?? "_خالی_")
+                string.Format("موجودیتی با شناسه {0} وجود خارجی ندارد !", input.Id ?? "_خالی_")
             );
 
         return result;

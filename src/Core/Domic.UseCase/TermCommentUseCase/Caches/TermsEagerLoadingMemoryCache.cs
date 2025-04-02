@@ -2,6 +2,7 @@
 using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
 using Domic.Domain.TermComment.Contracts.Interfaces;
+using Domic.UseCase.ArticleCommentAnswerUseCase.DTOs;
 using Domic.UseCase.TermCommentUseCase.DTOs;
 
 namespace Domic.UseCase.TermCommentUseCase.Caches;
@@ -13,7 +14,7 @@ public class TermsEagerLoadingMemoryCache(ITermCommentCommandRepository termComm
     public async Task<List<TermCommentsDto>> SetAsync(CancellationToken cancellationToken)
     {
         var result =
-            await termCommentCommandRepository.FindAllEagerLoadingWithOrderingByProjectionAsync<TermCommentsDto>(
+            await termCommentCommandRepository.FindAllWithOrderingByProjectionAsync<TermCommentsDto>(
                 comment => new TermCommentsDto {
                     Comment               = comment.Comment.Value               ,
                     IsActive              = comment.IsActive == IsActive.Active ,
@@ -21,16 +22,16 @@ public class TermsEagerLoadingMemoryCache(ITermCommentCommandRepository termComm
                     CreatedAt_PersianDate = comment.CreatedAt.PersianDate       ,
                     UpdatedAt_EnglishDate = comment.UpdatedAt.EnglishDate       ,
                     UpdatedAt_PersianDate = comment.UpdatedAt.PersianDate       ,
-                    /*Answers = comment.Answers.Select(answer => new ArticleCommentAnswersViewModel {
+                    Answers = comment.Answers.Select(answer => new TermCommentAnswersDto {
                         Answer                = answer.Answer.Value                ,
                         IsActive              = answer.IsActive == IsActive.Active ,
                         CreatedAt_EnglishDate = answer.CreatedAt.EnglishDate       ,
                         CreatedAt_PersianDate = answer.CreatedAt.PersianDate       ,
                         UpdatedAt_EnglishDate = answer.UpdatedAt.EnglishDate       ,
                         UpdatedAt_PersianDate = answer.UpdatedAt.PersianDate
-                    }).ToList()*/
+                    }).ToList()
                 },
-                Order.Date, false, cancellationToken
+                cancellationToken
             );
 
         return result.ToList();

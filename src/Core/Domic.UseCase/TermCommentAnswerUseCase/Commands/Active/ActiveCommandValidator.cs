@@ -4,20 +4,15 @@ using Domic.Domain.TermCommentAnswer.Contracts.Interfaces;
 
 namespace Domic.UseCase.TermCommentAnswerUseCase.Commands.Active;
 
-public class ActiveCommandValidator : IValidator<ActiveCommand>
+public class ActiveCommandValidator(ITermCommentAnswerCommandRepository termCommentAnswerCommandRepository) : IValidator<ActiveCommand>
 {
-    private readonly ITermCommentAnswerCommandRepository _termCommentAnswerCommandRepository;
-
-    public ActiveCommandValidator(ITermCommentAnswerCommandRepository termCommentAnswerCommandRepository)
-        => _termCommentAnswerCommandRepository = termCommentAnswerCommandRepository;
-
     public async Task<object> ValidateAsync(ActiveCommand input, CancellationToken cancellationToken)
     {
-        var answer = await _termCommentAnswerCommandRepository.FindByIdAsync(input.AnswerId, cancellationToken);
+        var answer = await termCommentAnswerCommandRepository.FindByIdAsync(input.Id, cancellationToken);
 
         if (answer is null)
             throw new UseCaseException(
-                string.Format("موجودیتی با شناسه {0} وجود خارجی ندارد !", input.AnswerId ?? "_خالی_")
+                string.Format("نظری با شناسه {0} یافت نشد !", input.Id ?? "_خالی_")
             );
 
         return answer;

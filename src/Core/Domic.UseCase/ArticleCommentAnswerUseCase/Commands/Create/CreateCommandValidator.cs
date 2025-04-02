@@ -11,7 +11,7 @@ public class CreateCommandValidator(IArticleCommentCommandRepository articleComm
     {
         if (!await articleCommentCommandRepository.IsExistByIdAsync(input.CommentId, cancellationToken))
             throw new UseCaseException(
-                string.Format("نظری با شناسه {0} موجود نمی باشد !", input.CommentId ?? "_خالی_")
+                string.Format("نظری با شناسه {0} یافت نشد !", input.CommentId ?? "_خالی_")
             );
 
         return default;

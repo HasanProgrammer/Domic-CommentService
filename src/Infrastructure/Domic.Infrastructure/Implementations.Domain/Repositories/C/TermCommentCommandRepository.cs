@@ -32,10 +32,14 @@ public class TermCommentCommandRepository(SQLContext sqlContext) : ITermCommentC
                                 .Include(comment => comment.Answers)
                                 .ToListAsync(cancellationToken);
 
-    public async Task<IEnumerable<TViewModel>> FindAllEagerLoadingByProjectionAsync<TViewModel>(
+    public async Task<List<TViewModel>> FindAllWithOrderingByProjectionAsync<TViewModel>(
         Expression<Func<TermComment, TViewModel>> projection, CancellationToken cancellationToken
     ) => await sqlContext.TermComments.Include(comment => comment.Answers)
                                       .AsNoTracking()
+                                      .OrderByDescending(comment => comment.CreatedAt.EnglishDate)
                                       .Select(projection)
                                       .ToListAsync(cancellationToken);
+
+    public Task<bool> IsExistByIdAsync(string id, CancellationToken cancellationToken)
+        => sqlContext.TermComments.AnyAsync(comment => comment.Id == id, cancellationToken);
 }

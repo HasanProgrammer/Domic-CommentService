@@ -105,6 +105,12 @@ public class ArticleCommentAnswer : Entity<string>
         );
     }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dateTime"></param>
+    /// <param name="serializer"></param>
+    /// <param name="identityUser"></param>
     public void Active(IDateTime dateTime, ISerializer serializer, IIdentityUser identityUser)
     {
         var nowDateTime        = DateTime.Now;
@@ -158,6 +164,35 @@ public class ArticleCommentAnswer : Entity<string>
                 }
             );
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dateTime"></param>
+    /// <param name="serializer"></param>
+    /// <param name="identityUser"></param>
+    public void InActive(IDateTime dateTime, ISerializer serializer, IIdentityUser identityUser)
+    {
+        var nowDateTime        = DateTime.Now;
+        var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
+
+        IsActive = IsActive.InActive;
+        
+        //audit
+        UpdatedBy   = identityUser.GetIdentity();
+        UpdatedRole = serializer.Serialize(identityUser.GetRoles());
+        UpdatedAt   = new UpdatedAt(nowDateTime, nowPersianDateTime);
+        
+        AddEvent(
+            new ArticleCommentAnswerInActived {
+                Id                    = Id          ,
+                UpdatedBy             = UpdatedBy   ,
+                UpdatedRole           = UpdatedRole , 
+                UpdatedAt_EnglishDate = nowDateTime ,
+                UpdatedAt_PersianDate = nowPersianDateTime
+            }
+        );
+    }
     
     /// <summary>
     /// 
@@ -188,6 +223,35 @@ public class ArticleCommentAnswer : Entity<string>
                     UpdatedAt_PersianDate = nowPersianDateTime
                 }
             );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dateTime"></param>
+    /// <param name="serializer"></param>
+    /// <param name="identityUser"></param>
+    public void Delete(IDateTime dateTime, ISerializer serializer, IIdentityUser identityUser)
+    {
+        var nowDateTime        = DateTime.Now;
+        var nowPersianDateTime = dateTime.ToPersianShortDate(nowDateTime);
+
+        IsDeleted = IsDeleted.Delete;
+        
+        //audit
+        UpdatedBy   = identityUser.GetIdentity();
+        UpdatedRole = serializer.Serialize(identityUser.GetRoles());
+        UpdatedAt   = new UpdatedAt(nowDateTime, nowPersianDateTime);
+        
+        AddEvent(
+            new ArticleCommentAnswerDeleted {
+                Id                    = Id          ,
+                UpdatedBy             = UpdatedBy   ,
+                UpdatedRole           = UpdatedRole , 
+                UpdatedAt_EnglishDate = nowDateTime ,
+                UpdatedAt_PersianDate = nowPersianDateTime
+            }
+        );
     }
     
     /// <summary>

@@ -1,9 +1,8 @@
-using Domic.UseCase.ArticleCommentAnswerUseCase.DTOs.ViewModels;
-using Domic.Core.UseCase.DTOs.ViewModels;
+using Domic.UseCase.ArticleCommentAnswerUseCase.DTOs;
 
-namespace Domic.UseCase.ArticleCommentUseCase.DTOs.ViewModels;
+namespace Domic.UseCase.ArticleCommentUseCase.DTOs;
 
-public class ArticleCommentsViewModel : ViewModel
+public class ArticleCommentDto
 {
     public string Comment                  { get; set; }
     public bool IsActive                   { get; set; }
@@ -12,5 +11,5 @@ public class ArticleCommentsViewModel : ViewModel
     public string CreatedAt_PersianDate    { get; set; }
     public string UpdatedAt_PersianDate    { get; set; }
     
-    public List<ArticleCommentAnswersViewModel> Answers { get; set; }
+    public List<ArticleCommentAnswerDto> Answers { get; set; }
 }

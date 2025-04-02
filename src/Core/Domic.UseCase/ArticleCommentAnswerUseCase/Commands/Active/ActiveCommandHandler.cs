@@ -9,8 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Domic.UseCase.ArticleCommentAnswerUseCase.Commands.Active;
 
-public class ActiveCommandHandler(IArticleCommentAnswerCommandRepository articleCommentAnswerCommandRepository, 
-    IDateTime dateTime, ISerializer serializer, [FromKeyedServices("Http2")] IIdentityUser identityUser
+public class ActiveCommandHandler(
+    IArticleCommentAnswerCommandRepository articleCommentAnswerCommandRepository,
+    IDateTime dateTime,
+    ISerializer serializer,
+    [FromKeyedServices("Http2")] IIdentityUser identityUser
 ) : ICommandHandler<ActiveCommand, string>
 {
     private readonly object _validationResult;
