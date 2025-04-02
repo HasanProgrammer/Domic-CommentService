@@ -1,4 +1,4 @@
-﻿using Domic.Core.Common.ClassConsts;
+using Domic.Core.Common.ClassConsts;
 using Domic.Core.Domain.Enumerations;
 using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
@@ -8,18 +8,14 @@ using Domic.UseCase.ArticleCommentUseCase.DTOs.ViewModels;
 
 namespace Domic.UseCase.ArticleCommentUseCase.Caches;
 
-public class ArticlesEagerLoadingMemoryCache : IInternalDistributedCacheHandler<List<ArticleCommentsViewModel>>
+public class ArticlesEagerLoadingMemoryCache(IArticleCommentCommandRepository articleCommentCommandRepository) 
+    : IInternalDistributedCacheHandler<List<ArticleCommentsViewModel>>
 {
-    private readonly IArticleCommentCommandRepository _articleCommentCommandRepository;
-
-    public ArticlesEagerLoadingMemoryCache(IArticleCommentCommandRepository articleCommentCommandRepository)
-        => _articleCommentCommandRepository = articleCommentCommandRepository;
-
     [Config(Key = Cache.ArticleComments, Ttl = 30 * 24 * 60)]
     public async Task<List<ArticleCommentsViewModel>> SetAsync(CancellationToken cancellationToken)
     {
         var result =
-            await _articleCommentCommandRepository.FindAllEagerLoadingWithOrderingByProjectionAsync<ArticleCommentsViewModel>(
+            await articleCommentCommandRepository.FindAllEagerLoadingWithOrderingByProjectionAsync<ArticleCommentsViewModel>(
                 comment => new ArticleCommentsViewModel {
                     Comment               = comment.Comment.Value               ,
                     IsActive              = comment.IsActive == IsActive.Active ,
