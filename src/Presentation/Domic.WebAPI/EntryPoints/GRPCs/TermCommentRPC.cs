@@ -5,7 +5,7 @@ using Grpc.Core;
 
 namespace Domic.WebAPI.EntryPoints.GRPCs;
 
-public class TermCommentRPC(IMediator mediator, IConfiguration configuration, IJsonWebToken jsonWebToken)
+public class TermCommentRPC(IMediator mediator, IConfiguration configuration)
     : TermCommentService.TermCommentServiceBase
 {
     /// <summary>
