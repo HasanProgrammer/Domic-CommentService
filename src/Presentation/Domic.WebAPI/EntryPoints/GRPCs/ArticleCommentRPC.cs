@@ -11,17 +11,8 @@ using Domic.WebAPI.Frameworks.Extensions.Mappers.ArticleCommentMappers;
 
 namespace Domic.WebAPI.EntryPoints.GRPCs;
 
-public class ArticleCommentRPC : ArticleCommentService.ArticleCommentServiceBase
+public class ArticleCommentRPC(IMediator mediator, IConfiguration configuration) : ArticleCommentService.ArticleCommentServiceBase
 {
-    private readonly IMediator      _mediator;
-    private readonly IConfiguration _configuration;
-
-    public ArticleCommentRPC(IMediator mediator, IConfiguration configuration)
-    {
-        _mediator      = mediator;
-        _configuration = configuration;
-    }
-
     /// <summary>
     /// 
     /// </summary>
@@ -30,11 +21,11 @@ public class ArticleCommentRPC : ArticleCommentService.ArticleCommentServiceBase
     /// <returns></returns>
     public override async Task<CreateResponse> Create(CreateRequest request, ServerCallContext context)
     {
-        var command = request.ToCommand<CreateCommand>(context.GetHttpContext().GetTokenOfGrpcHeader());
+        var command = request.ToCommand<CreateCommand>();
 
-        var result = await _mediator.DispatchAsync<string>(command, context.CancellationToken);
+        var result = await mediator.DispatchAsync<string>(command, context.CancellationToken);
 
-        return result.ToRpcResponse<CreateResponse>(_configuration);
+        return result.ToRpcResponse<CreateResponse>(configuration);
     }
 
     /// <summary>
@@ -44,12 +35,12 @@ public class ArticleCommentRPC : ArticleCommentService.ArticleCommentServiceBase
     /// <param name="context"></param>
     /// <returns></returns>
     public override async Task<UpdateResponse> Update(UpdateRequest request, ServerCallContext context)
-    {
-        var command = request.ToCommand<UpdateCommand>(context.GetHttpContext().GetTokenOfGrpcHeader());
+    {   
+        var command = request.ToCommand<UpdateCommand>();
         
-        var result = await _mediator.DispatchAsync<string>(command, context.CancellationToken);
+        var result = await mediator.DispatchAsync<string>(command, context.CancellationToken);
         
-        return result.ToRpcResponse<UpdateResponse>(_configuration);
+        return result.ToRpcResponse<UpdateResponse>(configuration);
     }
 
     /// <summary>
@@ -60,11 +51,11 @@ public class ArticleCommentRPC : ArticleCommentService.ArticleCommentServiceBase
     /// <returns></returns>
     public override async Task<ActiveResponse> Active(ActiveRequest request, ServerCallContext context)
     {
-        var command = request.ToCommand<ActiveCommand>(context.GetHttpContext().GetTokenOfGrpcHeader());
+        var command = request.ToCommand<ActiveCommand>();
 
-        var result = await _mediator.DispatchAsync<string>(command, context.CancellationToken);
+        var result = await mediator.DispatchAsync<string>(command, context.CancellationToken);
 
-        return result.ToRpcResponse<ActiveResponse>(_configuration);
+        return result.ToRpcResponse<ActiveResponse>(configuration);
     }
 
     /// <summary>
@@ -75,11 +66,11 @@ public class ArticleCommentRPC : ArticleCommentService.ArticleCommentServiceBase
     /// <returns></returns>
     public override async Task<InActiveResponse> InActive(InActiveRequest request, ServerCallContext context)
     {
-        var command = request.ToCommand<InActiveCommand>(context.GetHttpContext().GetTokenOfGrpcHeader());
+        var command = request.ToCommand<InActiveCommand>();
 
-        var result = await _mediator.DispatchAsync<string>(command, context.CancellationToken);
+        var result = await mediator.DispatchAsync<string>(command, context.CancellationToken);
 
-        return result.ToRpcResponse<InActiveResponse>(_configuration);
+        return result.ToRpcResponse<InActiveResponse>(configuration);
     }
 
     /// <summary>
@@ -90,10 +81,10 @@ public class ArticleCommentRPC : ArticleCommentService.ArticleCommentServiceBase
     /// <returns></returns>
     public override async Task<DeleteResponse> Delete(DeleteRequest request, ServerCallContext context)
     {
-        var command = request.ToCommand<DeleteCommand>(context.GetHttpContext().GetTokenOfGrpcHeader());
+        var command = request.ToCommand<DeleteCommand>();
         
-        var result = await _mediator.DispatchAsync<string>(command, context.CancellationToken);
+        var result = await mediator.DispatchAsync<string>(command, context.CancellationToken);
         
-        return result.ToRpcResponse<DeleteResponse>(_configuration);
+        return result.ToRpcResponse<DeleteResponse>(configuration);
     }
 }

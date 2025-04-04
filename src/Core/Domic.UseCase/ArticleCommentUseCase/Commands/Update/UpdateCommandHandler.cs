@@ -6,26 +6,18 @@ using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
 using Domic.Domain.ArticleComment.Contracts.Interfaces;
 using Domic.Domain.ArticleComment.Entities;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Domic.UseCase.ArticleCommentUseCase.Commands.Update;
 
-public class UpdateCommandHandler : ICommandHandler<UpdateCommand, string>
+public class UpdateCommandHandler(
+    IDateTime dateTime, 
+    ISerializer serializer, 
+    IArticleCommentCommandRepository articleCommentCommandRepository,
+    [FromKeyedServices("Http2")] IIdentityUser identityUser
+) : ICommandHandler<UpdateCommand, string>
 {
     private readonly object _validationResult;
-
-    private readonly IDateTime                        _dateTime;
-    private readonly ISerializer                      _serializer;
-    private readonly IJsonWebToken                    _jsonWebToken;
-    private readonly IArticleCommentCommandRepository _articleCommentCommandRepository;
-
-    public UpdateCommandHandler(IArticleCommentCommandRepository articleCommentCommandRepository, 
-        IDateTime dateTime, ISerializer serializer
-    )
-    {
-        _dateTime                        = dateTime;
-        _serializer                      = serializer;
-        _articleCommentCommandRepository = articleCommentCommandRepository;
-    }
 
     public Task BeforeHandleAsync(UpdateCommand command, CancellationToken cancellationToken) => Task.CompletedTask;
 
@@ -35,12 +27,10 @@ public class UpdateCommandHandler : ICommandHandler<UpdateCommand, string>
     public async Task<string> HandleAsync(UpdateCommand command, CancellationToken cancellationToken)
     {
         var targetComment = _validationResult as ArticleComment;
-        var updatedBy     = _jsonWebToken.GetIdentityUserId(command.Token);
-        var updatedRole   = _serializer.Serialize( _jsonWebToken.GetRoles(command.Token) );
         
-        targetComment.Change(_dateTime, updatedBy, updatedRole, command.Comment);
+        targetComment.Change(dateTime, identityUser, serializer, command.Comment);
 
-        await _articleCommentCommandRepository.ChangeAsync(targetComment, cancellationToken);
+        await articleCommentCommandRepository.ChangeAsync(targetComment, cancellationToken);
 
         return targetComment.Id;
     }

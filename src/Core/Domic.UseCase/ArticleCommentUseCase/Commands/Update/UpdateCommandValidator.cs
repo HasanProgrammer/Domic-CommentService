@@ -4,22 +4,15 @@ using Domic.Domain.ArticleComment.Contracts.Interfaces;
 
 namespace Domic.UseCase.ArticleCommentUseCase.Commands.Update;
 
-public class UpdateCommandValidator : IValidator<UpdateCommand>
+public class UpdateCommandValidator(IArticleCommentCommandRepository articleCommentCommandRepository) : IValidator<UpdateCommand>
 {
-    private readonly IArticleCommentCommandRepository _articleCommentCommandRepository;
-
-    public UpdateCommandValidator(IArticleCommentCommandRepository articleCommentCommandRepository)
-    {
-        _articleCommentCommandRepository = articleCommentCommandRepository;
-    }
-
     public async Task<object> ValidateAsync(UpdateCommand input, CancellationToken cancellationToken)
     {
-        var targetComment = await _articleCommentCommandRepository.FindByIdAsync(input.TargetId, cancellationToken);
-        
+        var targetComment = await articleCommentCommandRepository.FindByIdAsync(input.Id, cancellationToken);
+
         if (targetComment is null)
             throw new UseCaseException(
-                string.Format("فیلدی با شناسه {0} وجود خارجی ندارد !", input.TargetId ?? "_خالی_")
+                string.Format("نظری با شناسه {0} یافت نشد !", input.Id ?? "_خالی_")
             );
 
         return targetComment;

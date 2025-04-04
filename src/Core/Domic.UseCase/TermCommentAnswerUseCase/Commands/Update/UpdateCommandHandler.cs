@@ -5,39 +5,32 @@ using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
 using Domic.Domain.TermCommentAnswer.Contracts.Interfaces;
 using Domic.Domain.TermCommentAnswer.Entities;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Domic.UseCase.TermCommentAnswerUseCase.Commands.Update;
 
-public class UpdateCommandHandler : ICommandHandler<UpdateCommand, string>
+public class UpdateCommandHandler(
+    ITermCommentAnswerCommandRepository repository,
+    IDateTime dateTime,
+    ISerializer serializer,
+    [FromKeyedServices("Http2")] IIdentityUser identityUser
+) : ICommandHandler<UpdateCommand, string>
 {
     private readonly object _validationResult;
-
-    private readonly IDateTime _dateTime;
-    private readonly ISerializer _serializer;
-    private readonly ITermCommentAnswerCommandRepository _repository;
-
-    public UpdateCommandHandler(ITermCommentAnswerCommandRepository repository, IDateTime dateTime,
-        ISerializer serializer
-    )
-    {
-        _dateTime = dateTime;
-        _serializer = serializer;
-        _repository = repository;
-    }
 
     public Task BeforeHandleAsync(UpdateCommand command, CancellationToken cancellationToken) => Task.CompletedTask;
 
     [WithValidation]
     [WithTransaction]
-    public Task<string> HandleAsync(UpdateCommand command, CancellationToken cancellationToken)
+    public async Task<string> HandleAsync(UpdateCommand command, CancellationToken cancellationToken)
     {
         var answer = _validationResult as TermCommentAnswer;
 
-        answer.Change(_dateTime, command.UserId, _serializer.Serialize(command.UserRoles), command.Answer);
+        answer.Change(dateTime, identityUser, serializer, command.Answer);
 
-        _repository.Change(answer);
+        await repository.ChangeAsync(answer, cancellationToken);
 
-        return Task.FromResult(answer.Id);
+        return answer.Id;
     }
 
     public Task AfterHandleAsync(UpdateCommand command, CancellationToken cancellationToken)

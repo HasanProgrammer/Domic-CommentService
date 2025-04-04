@@ -4,21 +4,15 @@ using Domic.Domain.ArticleComment.Contracts.Interfaces;
 
 namespace Domic.UseCase.ArticleCommentUseCase.Queries.ReadOne;
 
-public class ReadOneQueryValidator : IValidator<ReadOneQuery>
+public class ReadOneQueryValidator(IArticleCommentCommandRepository articleCommentCommandRepository) : IValidator<ReadOneQuery>
 {
-    private readonly IArticleCommentCommandRepository _articleCommentCommandRepository;
-
-    public ReadOneQueryValidator(IArticleCommentCommandRepository articleCommentCommandRepository) 
-        => _articleCommentCommandRepository = articleCommentCommandRepository;
-
     public async Task<object> ValidateAsync(ReadOneQuery input, CancellationToken cancellationToken)
     {
-        var targetComment =
-            await _articleCommentCommandRepository.FindByIdEagerLoadingAsync(input.Id, cancellationToken);
+        var targetComment = await articleCommentCommandRepository.FindByIdEagerLoadingAsync(input.Id, cancellationToken);
 
         if (targetComment is null)
             throw new UseCaseException(
-                string.Format("موجودیتی با شناسه {0} وجود خارجی ندارد !", input.Id ?? "_خالی_")
+                string.Format("نظری با شناسه {0} یافت نشد !", input.Id ?? "_خالی_")
             );
 
         return targetComment;

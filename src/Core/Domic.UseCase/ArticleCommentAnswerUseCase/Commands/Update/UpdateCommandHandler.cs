@@ -5,43 +5,33 @@ using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
 using Domic.Domain.ArticleCommentAnswer.Contracts.Interfaces;
 using Domic.Domain.ArticleCommentAnswer.Entities;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Domic.UseCase.ArticleCommentAnswerUseCase.Commands.Update;
 
-public class UpdateCommandHandler : ICommandHandler<UpdateCommand, string>
+public class UpdateCommandHandler(
+    IArticleCommentAnswerCommandRepository articleCommentAnswerCommandRepository,
+    IDateTime dateTime,
+    ISerializer serializer,
+    [FromKeyedServices("Http2")] IIdentityUser identityUser
+) : ICommandHandler<UpdateCommand, string>
 {
     private readonly object _validationResult;
 
-    private readonly IDateTime                              _dateTime;
-    private readonly ISerializer                            _serializer;
-    private readonly IJsonWebToken                          _jsonWebToken;
-    private readonly IArticleCommentAnswerCommandRepository _articleCommentAnswerCommandRepository;
-
-    public UpdateCommandHandler(IArticleCommentAnswerCommandRepository articleCommentAnswerCommandRepository, 
-        IDateTime dateTime, ISerializer serializer, IJsonWebToken jsonWebToken
-    )
-    {
-        _dateTime                              = dateTime;
-        _serializer                            = serializer;
-        _jsonWebToken                          = jsonWebToken;
-        _articleCommentAnswerCommandRepository = articleCommentAnswerCommandRepository;
-    }
-
-    public Task BeforeHandleAsync(UpdateCommand command, CancellationToken cancellationToken) => Task.CompletedTask;
+    public Task BeforeHandleAsync(UpdateCommand command, CancellationToken cancellationToken) 
+        => Task.CompletedTask;
 
     [WithValidation]
     [WithTransaction]
-    public Task<string> HandleAsync(UpdateCommand command, CancellationToken cancellationToken)
+    public async Task<string> HandleAsync(UpdateCommand command, CancellationToken cancellationToken)
     {
-        var answer      = _validationResult as ArticleCommentAnswer;
-        var updatedBy   = _jsonWebToken.GetIdentityUserId(command.Token);
-        var updatedRole = _serializer.Serialize( _jsonWebToken.GetRoles(command.Token) );
-        
-        answer.Change(_dateTime, updatedBy, updatedRole, command.Answer);
+        var answer = _validationResult as ArticleCommentAnswer;
 
-        _articleCommentAnswerCommandRepository.Change(answer);
+        answer.Change(dateTime, serializer, identityUser, command.Answer);
 
-        return Task.FromResult(answer.Id);
+        await articleCommentAnswerCommandRepository.ChangeAsync(answer, cancellationToken);
+
+        return answer.Id;
     }
 
     public Task AfterHandleAsync(UpdateCommand message, CancellationToken cancellationToken)

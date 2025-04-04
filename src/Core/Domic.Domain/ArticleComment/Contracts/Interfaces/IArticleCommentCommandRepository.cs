@@ -1,4 +1,6 @@
+using System.Linq.Expressions;
 using Domic.Core.Domain.Contracts.Interfaces;
+using Domic.Core.Domain.Enumerations;
 
 namespace Domic.Domain.ArticleComment.Contracts.Interfaces;
 
@@ -32,6 +34,20 @@ public interface IArticleCommentCommandRepository : ICommandRepository<Entities.
     public Task<List<Entities.ArticleComment>> FindAllEagerLoadingByOwnerIdAsync(string ownerId, 
         CancellationToken cancellationToken
     ) => throw new NotImplementedException();
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TViewModel"></typeparam>
+    /// <param name="projection"></param>
+    /// <param name="order"></param>
+    /// <param name="accending"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public new Task<List<TViewModel>> FindAllWithOrderingByProjectionAsync<TViewModel>(
+        Expression<Func<Entities.ArticleComment, TViewModel>> projection, Order order, bool accending, 
+        CancellationToken cancellationToken
+    );
 
     /// <summary>
     /// 

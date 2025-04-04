@@ -17,103 +17,49 @@ public static partial class RpcRequestExtension
 public static partial class RpcRequestExtension
 {
     /// <summary>
-    /// 
+    /// Map CreateRequest to CreateCommand
     /// </summary>
     /// <param name="request"></param>
-    /// <param name="userId"></param>
-    /// <param name="username"></param>
-    /// <param name="userRoles"></param>
-    /// <param name="userPermissions"></param>
     /// <returns></returns>
-    public static CreateCommand ToCommand(this CreateRequest request, string userId, string username,
-        ReadOnlyCollection<string> userRoles,
-        ReadOnlyCollection<string> userPermissions
-    ) => new() {
-        UserId = userId,
-        Username = username,
-        UserRoles = userRoles,
-        UserPermissions = userPermissions,
-        TermId = request.TermId.Value,
+    public static CreateCommand ToCommand(this CreateRequest request) => new() {
+        TermId  = request.TermId.Value,
         Comment = request.Comment.Value
     };
 
     /// <summary>
-    /// 
+    /// Map UpdateRequest to UpdateCommand
     /// </summary>
     /// <param name="request"></param>
-    /// <param name="userId"></param>
-    /// <param name="username"></param>
-    /// <param name="userRoles"></param>
-    /// <param name="userPermissions"></param>
     /// <returns></returns>
-    public static UpdateCommand ToCommand(this UpdateRequest request, string userId, string username,
-        ReadOnlyCollection<string> userRoles, ReadOnlyCollection<string> userPermissions
-    ) => new() {
-        UserId = userId,
-        Username = username,
-        UserRoles = userRoles,
-        UserPermissions = userPermissions,
-        Id = request.CommentId.Value,
+    public static UpdateCommand ToCommand(this UpdateRequest request) => new() {
+        Id      = request.CommentId.Value,
         Comment = request.Comment.Value
     };
 
     /// <summary>
-    /// 
+    /// Map ActiveRequest to ActiveCommand
     /// </summary>
     /// <param name="request"></param>
-    /// <param name="userId"></param>
-    /// <param name="username"></param>
-    /// <param name="userRoles"></param>
-    /// <param name="userPermissions"></param>
     /// <returns></returns>
-    public static ActiveCommand ToCommand(this ActiveRequest request, string userId, string username,
-        ReadOnlyCollection<string> userRoles,
-        ReadOnlyCollection<string> userPermissions
-    ) => new() {
-        UserId = userId,
-        Username = username,
-        UserRoles = userRoles,
-        UserPermissions = userPermissions,
+    public static ActiveCommand ToCommand(this ActiveRequest request) => new() {
         Id = request.CommentId.Value
     };
 
     /// <summary>
-    /// 
+    /// Map InActiveRequest to InActiveCommand
     /// </summary>
     /// <param name="request"></param>
-    /// <param name="userId"></param>
-    /// <param name="username"></param>
-    /// <param name="userRoles"></param>
-    /// <param name="userPermissions"></param>
     /// <returns></returns>
-    public static InActiveCommand ToCommand(this InActiveRequest request, string userId, string username,
-        ReadOnlyCollection<string> userRoles,
-        ReadOnlyCollection<string> userPermissions
-    ) => new() {
-        UserId = userId,
-        Username = username,
-        UserRoles = userRoles,
-        UserPermissions = userPermissions,
+    public static InActiveCommand ToCommand(this InActiveRequest request) => new() {
         Id = request.CommentId.Value
     };
 
     /// <summary>
-    /// 
+    /// Map DeleteRequest to DeleteCommand
     /// </summary>
     /// <param name="request"></param>
-    /// <param name="userId"></param>
-    /// <param name="username"></param>
-    /// <param name="userRoles"></param>
-    /// <param name="userPermissions"></param>
     /// <returns></returns>
-    public static DeleteCommand ToCommand(this DeleteRequest request, string userId, string username,
-        ReadOnlyCollection<string> userRoles,
-        ReadOnlyCollection<string> userPermissions
-    ) => new() {
-        UserId = userId,
-        Username = username,
-        UserRoles = userRoles,
-        UserPermissions = userPermissions,
+    public static DeleteCommand ToCommand(this DeleteRequest request) => new() {
         Id = request.CommentId.Value
     };
 }

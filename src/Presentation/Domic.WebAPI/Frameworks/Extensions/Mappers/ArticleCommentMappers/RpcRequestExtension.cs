@@ -17,20 +17,18 @@ public static partial class RpcRequestExtension
 public static partial class RpcRequestExtension
 {
     /// <summary>
-    /// 
+    /// Map CreateRequest to CreateCommand  
     /// </summary>
     /// <param name="request"></param>
-    /// <param name="token"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static T ToCommand<T>(this CreateRequest request, string token)
+    public static T ToCommand<T>(this CreateRequest request)
     {
         object Request = null;
 
         if (typeof(T) == typeof(CreateCommand))
         {
             Request = new CreateCommand {
-                Token     = token                    ,
                 ArticleId = request.ArticleId?.Value ,
                 Comment   = request.Comment?.Value 
             };
@@ -40,22 +38,20 @@ public static partial class RpcRequestExtension
     }
     
     /// <summary>
-    /// 
+    /// Map UpdateRequest to UpdateCommand
     /// </summary>
     /// <param name="request"></param>
-    /// <param name="token"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static T ToCommand<T>(this UpdateRequest request, string token)
+    public static T ToCommand<T>(this UpdateRequest request)
     {
         object Request = null;
 
         if (typeof(T) == typeof(UpdateCommand))
         {
             Request = new UpdateCommand {
-                Token    = token                  ,
-                TargetId = request.TargetId.Value , 
-                Comment  = request.Comment?.Value 
+                Id      = request.TargetId.Value , 
+                Comment = request.Comment?.Value 
             };
         }
 
@@ -63,21 +59,19 @@ public static partial class RpcRequestExtension
     }
     
     /// <summary>
-    /// 
+    /// Map ActiveRequest to ActiveCommand
     /// </summary>
     /// <param name="request"></param>
-    /// <param name="token"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static T ToCommand<T>(this ActiveRequest request, string token)
+    public static T ToCommand<T>(this ActiveRequest request)
     {
         object Request = null;
 
         if (typeof(T) == typeof(ActiveCommand))
         {
             Request = new ActiveCommand {
-                Token    = token ,
-                TargetId = request.TargetId.Value
+                Id = request.TargetId.Value
             };
         }
 
@@ -85,21 +79,19 @@ public static partial class RpcRequestExtension
     }
     
     /// <summary>
-    /// 
+    /// Map InActiveRequest to InActiveCommand
     /// </summary>
     /// <param name="request"></param>
-    /// <param name="token"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static T ToCommand<T>(this InActiveRequest request, string token)
+    public static T ToCommand<T>(this InActiveRequest request)
     {
         object Request = null;
 
         if (typeof(T) == typeof(InActiveCommand))
         {
             Request = new InActiveCommand {
-                Token    = token ,
-                TargetId = request.TargetId.Value
+                Id = request.TargetId.Value
             };
         }
 
@@ -107,21 +99,19 @@ public static partial class RpcRequestExtension
     }
     
     /// <summary>
-    /// 
+    /// Map DeleteRequest to DeleteCommand
     /// </summary>
     /// <param name="request"></param>
-    /// <param name="token"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static T ToCommand<T>(this DeleteRequest request, string token)
+    public static T ToCommand<T>(this DeleteRequest request)
     {
         object Request = null;
 
         if (typeof(T) == typeof(DeleteCommand))
         {
             Request = new DeleteCommand {
-                Token    = token ,
-                TargetId = request.TargetId.Value
+                Id = request.TargetId.Value
             };
         }
 

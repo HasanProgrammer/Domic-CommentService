@@ -4,19 +4,14 @@ using Domic.Domain.TermCommentAnswer.Contracts.Interfaces;
 
 namespace Domic.UseCase.TermCommentAnswerUseCase.Commands.Update;
 
-public class UpdateCommandValidator : IValidator<UpdateCommand>
+public class UpdateCommandValidator(ITermCommentAnswerCommandRepository repository) : IValidator<UpdateCommand>
 {
-    private readonly ITermCommentAnswerCommandRepository _repository;
-
-    public UpdateCommandValidator(ITermCommentAnswerCommandRepository repository) => _repository = repository;
-
     public async Task<object> ValidateAsync(UpdateCommand input, CancellationToken cancellationToken)
     {
-        var answer =
-            await _repository.FindByIdAsync(input.AnswerId, cancellationToken);
+        var answer = await repository.FindByIdAsync(input.AnswerId, cancellationToken);
 
         if (answer is null)
-            throw new UseCaseException(string.Format("موجودیتی با شناسه {0} وجود خارجی ندارد !", input.AnswerId));
+            throw new UseCaseException(string.Format("پاسخی با شناسه {0} یافت نشد !", input.AnswerId));
 
         return answer;
     }
