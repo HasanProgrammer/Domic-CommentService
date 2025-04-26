@@ -30,7 +30,7 @@ services:
       - I-RabbitMQ-Username=
       - I-RabbitMQ-Password=
       - E-RedisConnectionString=domic.redis:6379
-      - I-RedisConnectionString=
+      - I-RedisConnectionString=domic.comment.redis:6379
       - MongoConnectionString=
       - C-SqlServerConnectionString=Server=domic.comment.command.sql.server,1433;Database=CommentService;User ID=sa;Password=Domic123!@#;Persist Security Info=True;MultipleActiveResultSets=True;
       - Q-SqlServerConnectionString=
@@ -62,7 +62,7 @@ services:
     container_name: 'comment_redis'
     command: 'redis-server'
     ports:
-      - 6380:6379
+      - 9380:6379
 
 volumes:
   log:
