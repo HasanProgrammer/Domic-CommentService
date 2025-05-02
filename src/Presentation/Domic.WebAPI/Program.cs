@@ -30,6 +30,7 @@ builder.RegisterEventStreamBroker();
 builder.RegisterEventsPublisher();
 builder.RegisterEventsSubscriber();
 builder.RegisterServices();
+builder.RegisterAssemblyTypesInMemory();
 
 builder.Services.AddMvc();
 builder.Services.AddHttpContextAccessor();

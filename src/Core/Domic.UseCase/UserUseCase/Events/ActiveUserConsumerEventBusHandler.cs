@@ -1,4 +1,5 @@
 ﻿using Domic.Core.Common.ClassConsts;
+using Domic.Core.Common.ClassEnums;
 using Domic.Core.Domain.Contracts.Interfaces;
 using Domic.Core.UseCase.Attributes;
 using Domic.Core.UseCase.Contracts.Interfaces;
@@ -25,10 +26,7 @@ public class ActiveUserConsumerEventBusHandler : IConsumerEventBusHandler<UserAc
         _articleCommentAnswerCommandRepository = articleCommentAnswerCommandRepository;
     }
 
-    public Task BeforeHandleAsync(UserActived @event, CancellationToken cancellationToken)
-    {
-        return Task.CompletedTask;
-    }
+    public Task BeforeHandleAsync(UserActived @event, CancellationToken cancellationToken) => Task.CompletedTask;
 
     [TransactionConfig(Type = TransactionType.Command)]
     [WithCleanCache(Keies = Cache.ArticleComments)]
@@ -75,8 +73,5 @@ public class ActiveUserConsumerEventBusHandler : IConsumerEventBusHandler<UserAc
         await _articleCommentAnswerCommandRepository.ChangeRangeAsync(userArticleCommentAnswers, cancellationToken);
     }
 
-    public Task AfterHandleAsync(UserActived @event, CancellationToken cancellationToken)
-    {
-        return Task.CompletedTask;
-    }
+    public Task AfterHandleAsync(UserActived @event, CancellationToken cancellationToken) => Task.CompletedTask;
 }
