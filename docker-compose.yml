@@ -50,7 +50,7 @@ services:
     image: 'mcr.microsoft.com/mssql/server'
     container_name: "comment_command_sql_server"
     ports:
-      - 1435:1433
+      - 1780:1433
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Domic123!@#
