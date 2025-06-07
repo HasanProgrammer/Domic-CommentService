@@ -46,6 +46,13 @@ public class ArticleCommentCommandRepository(SQLContext sqlContext) : IArticleCo
                                                .ToListAsync(cancellationToken);
     }
 
+    public Task<List<ArticleComment>> FindAllEagerLoadingByOwnerIdAsync(string ownerId, 
+        CancellationToken cancellationToken
+    ) => sqlContext.ArticleComments.AsNoTracking()
+                                   .Where(comment => comment.CreatedBy == ownerId)
+                                   .Include(comment => comment.Answers)
+                                   .ToListAsync(cancellationToken);
+
     public Task<List<TViewModel>> FindAllWithOrderingByProjectionAsync<TViewModel>(
         Expression<Func<ArticleComment, TViewModel>> projection, Order order, bool accending, 
         CancellationToken cancellationToken
