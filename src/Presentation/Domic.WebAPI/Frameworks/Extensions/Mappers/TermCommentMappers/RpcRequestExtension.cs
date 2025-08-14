@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using Domic.Core.TermComment.Grpc;
 using Domic.UseCase.TermCommentUseCase.Commands.Active;
 using Domic.UseCase.TermCommentUseCase.Commands.Create;

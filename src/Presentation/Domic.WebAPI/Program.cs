@@ -66,6 +66,8 @@ application.UseEndpoints(endpoints => {
 
     endpoints.MapGrpcService<ArticleCommentRPC>();
     endpoints.MapGrpcService<ArticleCommentAnswerRPC>();
+    endpoints.MapGrpcService<TermCommentRPC>();
+    endpoints.MapGrpcService<TermCommentAnswerRPC>();
 
     #endregion
 
