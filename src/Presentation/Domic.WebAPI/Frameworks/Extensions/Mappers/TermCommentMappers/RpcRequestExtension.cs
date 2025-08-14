@@ -21,8 +21,8 @@ public static partial class RpcRequestExtension
     /// <param name="request"></param>
     /// <returns></returns>
     public static CreateCommand ToCommand(this CreateRequest request) => new() {
-        TermId  = request.TermId.Value,
-        Comment = request.Comment.Value
+        TermId  = request.TermId?.Value,
+        Comment = request.Comment?.Value
     };
 
     /// <summary>
