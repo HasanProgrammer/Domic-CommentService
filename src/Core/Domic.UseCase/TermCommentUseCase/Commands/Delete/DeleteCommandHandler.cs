@@ -38,9 +38,11 @@ public class DeleteCommandHandler(
         foreach (var answer in targetComment.Answers)
         {
             answer.Delete(dateTime, identityUser, serializer);
-
-            await termCommentAnswerCommandRepository.ChangeAsync(answer, cancellationToken);
+            
+            answers.Add(answer);
         }
+        
+        await termCommentAnswerCommandRepository.ChangeRangeAsync(answers, cancellationToken);
 
         return targetComment.Id;
     }

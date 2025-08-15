@@ -1,0 +1,12 @@
+
+ Date: 1404/05/24 | Message: The method or operation is not implemented. | Source: System.NotImplementedException: The method or operation is not implemented.
+   at Domic.Core.Domain.Contracts.Interfaces.IRepository`1.FindByIdEagerLoadingAsync(Object id, CancellationToken cancellationToken)
+   at Domic.UseCase.TermCommentUseCase.Commands.Delete.DeleteCommandValidator.ValidateAsync(DeleteCommand input, CancellationToken cancellationToken) in D:\Programming\Hasan Company\Programming ASP\DotrisCompany\CommentService\src\Core\Domic.UseCase\TermCommentUseCase\Commands\Delete\DeleteCommandValidator.cs:line 16
+   at CallSite.Target(Closure, CallSite, Object)
+   at Domic.Core.Infrastructure.Concretes.Mediator._ValidationAsync[TResult](Object commandHandler, Type commandHandlerType, MethodInfo commandHandlerMethod, ICommand`1 command, CancellationToken cancellationToken)
+   at Domic.Core.Infrastructure.Concretes.Mediator.DispatchAsync[TResult](ICommand`1 command, CancellationToken cancellationToken)
+   at Domic.WebAPI.EntryPoints.GRPCs.TermCommentRPC.Delete(DeleteRequest request, ServerCallContext context) in D:\Programming\Hasan Company\Programming ASP\DotrisCompany\CommentService\src\Presentation\Domic.WebAPI\EntryPoints\GRPCs\TermCommentRPC.cs:line 81
+   at Grpc.Shared.Server.UnaryServerMethodInvoker`3.ResolvedInterceptorInvoker(TRequest resolvedRequest, ServerCallContext resolvedContext)
+   at Grpc.Shared.Server.UnaryServerMethodInvoker`3.ResolvedInterceptorInvoker(TRequest resolvedRequest, ServerCallContext resolvedContext)
+   at Domic.Core.WebAPI.Middlewares.FullExceptionHandlerInterceptor.UnaryServerHandler[TRequest,TResponse](TRequest request, ServerCallContext context, UnaryServerMethod`2 continuation) 
+

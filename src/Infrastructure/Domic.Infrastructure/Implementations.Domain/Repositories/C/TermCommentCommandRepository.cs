@@ -25,6 +25,12 @@ public class TermCommentCommandRepository(SQLContext sqlContext) : ITermCommentC
     public Task<TermComment> FindByIdAsync(object id, CancellationToken cancellationToken)
         => sqlContext.TermComments.FirstOrDefaultAsync(comment => comment.Id == id as string, cancellationToken);
 
+    public Task<TermComment> FindByIdEagerLoadingAsync(object id, CancellationToken cancellationToken) 
+        => sqlContext.TermComments.AsNoTracking()
+                                  .Where(comment => comment.Id == id as string)
+                                  .Include(comment => comment.Answers)
+                                  .FirstOrDefaultAsync(cancellationToken);
+
     public Task<List<TermComment>> FindAllEagerLoadingByTermIdAsync(string termId, 
         CancellationToken cancellationToken
     ) => sqlContext.TermComments.AsNoTracking()
