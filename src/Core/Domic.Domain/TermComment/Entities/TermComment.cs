@@ -183,7 +183,7 @@ public class TermComment : Entity<string>
         UpdatedAt   = new UpdatedAt(nowDateTime, nowPersianDateTime);
         
         AddEvent(
-            new TermCommentInActived {
+            new TermCommentActived {
                 Id                    = Id          ,
                 UpdatedBy             = UpdatedBy   , 
                 UpdatedRole           = UpdatedRole , 
@@ -212,7 +212,7 @@ public class TermComment : Entity<string>
         
         if(raiseEvent)
             AddEvent(
-                new TermCommentInActived {
+                new TermCommentActived {
                     Id                    = Id          ,
                     UpdatedBy             = updatedBy   , 
                     UpdatedRole           = updatedRole , 
