@@ -8,7 +8,7 @@ public class CreateCommandValidator(ITermCommentCommandRepository termCommentCom
 {
     public async Task<object> ValidateAsync(CreateCommand input, CancellationToken cancellationToken)
     {
-        if (await termCommentCommandRepository.IsExistByIdAsync(input.CommentId, cancellationToken))
+        if (!await termCommentCommandRepository.IsExistByIdAsync(input.CommentId, cancellationToken))
             throw new UseCaseException(
                 string.Format("نظری با شناسه {0} یافت نشد !", input.CommentId ?? "_خالی_")
             );
