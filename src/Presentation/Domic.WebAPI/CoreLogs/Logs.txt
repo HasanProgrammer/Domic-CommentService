@@ -10,3 +10,19 @@
    at Grpc.Shared.Server.UnaryServerMethodInvoker`3.ResolvedInterceptorInvoker(TRequest resolvedRequest, ServerCallContext resolvedContext)
    at Domic.Core.WebAPI.Middlewares.FullExceptionHandlerInterceptor.UnaryServerHandler[TRequest,TResponse](TRequest request, ServerCallContext context, UnaryServerMethod`2 continuation) 
 
+
+ Date: 1404/05/25 | Message: Object reference not set to an instance of an object. | Source: System.NullReferenceException: Object reference not set to an instance of an object.
+   at Domic.WebAPI.Frameworks.Extensions.Mappers.TermCommentAnswerMappers.RpcRequestExtension.ToCommand(CreateRequest request) in D:\Programming\Hasan Company\Programming ASP\DotrisCompany\CommentService\src\Presentation\Domic.WebAPI\Frameworks\Extensions\Mappers\TermCommentAnswerMappers\RpcRequestExtension.cs:line 23
+   at Domic.WebAPI.EntryPoints.GRPCs.TermCommentAnswerRPC.Create(CreateRequest request, ServerCallContext context) in D:\Programming\Hasan Company\Programming ASP\DotrisCompany\CommentService\src\Presentation\Domic.WebAPI\EntryPoints\GRPCs\TermCommentAnswerRPC.cs:line 19
+   at Grpc.Shared.Server.UnaryServerMethodInvoker`3.ResolvedInterceptorInvoker(TRequest resolvedRequest, ServerCallContext resolvedContext)
+   at Grpc.Shared.Server.UnaryServerMethodInvoker`3.ResolvedInterceptorInvoker(TRequest resolvedRequest, ServerCallContext resolvedContext)
+   at Domic.Core.WebAPI.Middlewares.FullExceptionHandlerInterceptor.UnaryServerHandler[TRequest,TResponse](TRequest request, ServerCallContext context, UnaryServerMethod`2 continuation) 
+
+
+ Date: 1404/05/25 | Message: Object reference not set to an instance of an object. | Source: System.NullReferenceException: Object reference not set to an instance of an object.
+   at Domic.WebAPI.Frameworks.Extensions.Mappers.TermCommentAnswerMappers.RpcRequestExtension.ToCommand(CreateRequest request) in D:\Programming\Hasan Company\Programming ASP\DotrisCompany\CommentService\src\Presentation\Domic.WebAPI\Frameworks\Extensions\Mappers\TermCommentAnswerMappers\RpcRequestExtension.cs:line 23
+   at Domic.WebAPI.EntryPoints.GRPCs.TermCommentAnswerRPC.Create(CreateRequest request, ServerCallContext context) in D:\Programming\Hasan Company\Programming ASP\DotrisCompany\CommentService\src\Presentation\Domic.WebAPI\EntryPoints\GRPCs\TermCommentAnswerRPC.cs:line 19
+   at Grpc.Shared.Server.UnaryServerMethodInvoker`3.ResolvedInterceptorInvoker(TRequest resolvedRequest, ServerCallContext resolvedContext)
+   at Grpc.Shared.Server.UnaryServerMethodInvoker`3.ResolvedInterceptorInvoker(TRequest resolvedRequest, ServerCallContext resolvedContext)
+   at Domic.Core.WebAPI.Middlewares.FullExceptionHandlerInterceptor.UnaryServerHandler[TRequest,TResponse](TRequest request, ServerCallContext context, UnaryServerMethod`2 continuation) 
+
