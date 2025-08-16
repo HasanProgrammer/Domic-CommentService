@@ -34,6 +34,6 @@ public class DeleteCommandHandler(
         return targetAnswer.Id;
     }
 
-    public Task AfterTransactionHandleAsync(DeleteCommand command, CancellationToken cancellationToken)
+    public Task AfterHandleAsync(DeleteCommand command, CancellationToken cancellationToken)
         => Task.CompletedTask;
 }

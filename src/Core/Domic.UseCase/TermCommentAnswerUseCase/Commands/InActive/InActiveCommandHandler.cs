@@ -33,6 +33,6 @@ public class InActiveCommandHandler(
         return answer.Id;
     }
 
-    public Task AfterTransactionHandleAsync(InActiveCommand command, CancellationToken cancellationToken)
+    public Task AfterHandleAsync(InActiveCommand command, CancellationToken cancellationToken)
         => Task.CompletedTask;
 }
