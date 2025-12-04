@@ -15,8 +15,8 @@ services:
       - "1080-1100:443"
     volumes:
       - log:/app/CoreLogs
-#     - ~/services/Domic-CommentService/.https/:/https/
-      - C:\https\:/https/
+      - ~/services/Domic-CommentService/.https/:/https/
+#     - C:\https\:/https/
     environment:
       - Elastic-Host=http://domic.elastic.search:9200
       - Elastic-Index=comment
@@ -31,9 +31,11 @@ services:
       - I-RabbitMQ-Username=
       - I-RabbitMQ-Password=
       - E-RedisConnectionString=domic.redis:6379
-      - I-RedisConnectionString=domic.comment.redis:6379
+      - I-RedisConnectionString=domic.redis:6379
+#     - I-RedisConnectionString=domic.comment.redis:6379
       - MongoConnectionString=
-      - C-SqlServerConnectionString=Server=domic.comment.command.sql.server,1433;Database=CommentService;User ID=sa;Password=Domic123!@#;Persist Security Info=True;MultipleActiveResultSets=True;
+      - C-SqlServerConnectionString=Server=domic.sql.server,1433;Database=CommentService;User ID=sa;Password=Domic123!@#;Persist Security Info=True;MultipleActiveResultSets=True;
+#     - C-SqlServerConnectionString=Server=domic.comment.command.sql.server,1433;Database=CommentService;User ID=sa;Password=Domic123!@#;Persist Security Info=True;MultipleActiveResultSets=True;
       - Q-SqlServerConnectionString=
       - Host=domic.comment.api
       - Port=443
@@ -41,29 +43,29 @@ services:
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Password=Domic123!@#
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/Domic.WebAPI.pfx
-    depends_on:
-      - domic.comment.command.sql.server
-      - domic.comment.redis
+#   depends_on:
+#     - domic.comment.command.sql.server
+#     - domic.comment.redis
     
-    domic.comment.command.sql.server:
-      networks:
-        - domic
-      image: 'mcr.microsoft.com/mssql/server'
-      container_name: "comment_command_sql_server"
-      ports:
-        - 1780:1433
-      environment:
-        - ACCEPT_EULA=Y
-        - SA_PASSWORD=Domic123!@#
+#   domic.comment.command.sql.server:
+#     networks:
+#       - domic
+#     image: 'mcr.microsoft.com/mssql/server'
+#     container_name: "comment_command_sql_server"
+#     ports:
+#       - 1780:1433
+#     environment:
+#       - ACCEPT_EULA=Y
+#       - SA_PASSWORD=Domic123!@#
   
-    domic.comment.redis:
-      networks:
-        - domic
-      image: 'redis'
-      container_name: 'comment_redis'
-      command: 'redis-server'
-      ports:
-        - 9380:6379
+#   domic.comment.redis:
+#     networks:
+#       - domic
+#     image: 'redis'
+#     container_name: 'comment_redis'
+#     command: 'redis-server'
+#     ports:
+#       - 9380:6379
 
 volumes:
   log:
