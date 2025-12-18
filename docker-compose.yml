@@ -2,11 +2,11 @@ name: 'comment_service'
 
 services:
   
-  domic.comment.api:
+  domic.comment.service:
     networks:
       - domic
-    image: comment_service_api_image:1.0.0
-    container_name: "comment_service_api"
+    image: domic_comment_service_image:1.0.0
+    container_name: "domic_comment_service"
     build:
       context: .
       dockerfile: Dockerfile
@@ -14,9 +14,8 @@ services:
     ports:
       - "1080-1100:443"
     volumes:
-      - log:/app/CoreLogs
+      - ~/services/Logs/Domic-CommentService/:/app/CoreLogs
       - ~/services/Domic-CommentService/.https/:/https/
-#     - C:\https\:/https/
     environment:
       - Elastic-Host=http://domic.elastic.search:9200
       - Elastic-Index=comment
@@ -34,8 +33,8 @@ services:
       - I-RedisConnectionString=domic.redis:6379
 #     - I-RedisConnectionString=domic.comment.redis:6379
       - MongoConnectionString=
-      - C-SqlServerConnectionString=Server=domic.sql.server,1433;Database=CommentService;User ID=sa;Password=Domic123!@#;Persist Security Info=True;MultipleActiveResultSets=True;
-#     - C-SqlServerConnectionString=Server=domic.comment.command.sql.server,1433;Database=CommentService;User ID=sa;Password=Domic123!@#;Persist Security Info=True;MultipleActiveResultSets=True;
+      - C-SqlServerConnectionString=Server=domic.sql.server,1433;Database=CommentService;User ID=sa;Password=Domic123!@#;Persist Security Info=True;MultipleActiveResultSets=True;TrustServerCertificate=True;
+#     - C-SqlServerConnectionString=Server=domic.comment.command.sql.server,1433;Database=CommentService;User ID=sa;Password=Domic123!@#;Persist Security Info=True;MultipleActiveResultSets=True;TrustServerCertificate=True;
       - Q-SqlServerConnectionString=
       - Host=domic.comment.api
       - Port=443
@@ -43,6 +42,7 @@ services:
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Password=Domic123!@#
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/Domic.WebAPI.pfx
+
 #   depends_on:
 #     - domic.comment.command.sql.server
 #     - domic.comment.redis
@@ -51,7 +51,7 @@ services:
 #     networks:
 #       - domic
 #     image: 'mcr.microsoft.com/mssql/server'
-#     container_name: "comment_command_sql_server"
+#     container_name: "domic_comment_command_sql_server"
 #     ports:
 #       - 1780:1433
 #     environment:
@@ -62,13 +62,10 @@ services:
 #     networks:
 #       - domic
 #     image: 'redis'
-#     container_name: 'comment_redis'
+#     container_name: 'domic_comment_redis'
 #     command: 'redis-server'
 #     ports:
 #       - 9380:6379
-
-volumes:
-  log:
     
 networks:
   domic:
