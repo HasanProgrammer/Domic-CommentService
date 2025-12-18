@@ -36,7 +36,7 @@ services:
       - C-SqlServerConnectionString=Server=domic.sql.server,1433;Database=CommentService;User ID=sa;Password=Domic123!@#;Persist Security Info=True;MultipleActiveResultSets=True;TrustServerCertificate=True;
 #     - C-SqlServerConnectionString=Server=domic.comment.command.sql.server,1433;Database=CommentService;User ID=sa;Password=Domic123!@#;Persist Security Info=True;MultipleActiveResultSets=True;TrustServerCertificate=True;
       - Q-SqlServerConnectionString=
-      - Host=domic.comment.api
+      - Host=domic.comment.service
       - Port=443
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=https://+:443;http://+:80
